@@ -86,6 +86,8 @@ RUN mkdir -p /opt/flarum \
 
 COPY rootfs /
 
+RUN chmod +x /usr/local/bin/*
+
 EXPOSE 8000
 WORKDIR /opt/flarum
 VOLUME [ "/data" ]
