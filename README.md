@@ -45,10 +45,11 @@ Image: crazymax/flarum:latest
 
 ### Environment variables
 
+#### General
+
 * `TZ`: The timezone assigned to the container (default `UTC`)
 * `PUID`: Flarum user id (default `1000`)
 * `PGID`: Flarum group id (default `1000`)
-
 * `MEMORY_LIMIT`: PHP memory limit (default `256M`)
 * `UPLOAD_MAX_SIZE`: Upload max size (default `16M`)
 * `OPCACHE_MEM_SIZE`: PHP OpCache memory consumption (default `128`)
@@ -56,11 +57,15 @@ Image: crazymax/flarum:latest
 * `REAL_IP_HEADER`: Request header field whose value will be used to replace the client address (default `X-Forwarded-For`)
 * `LOG_IP_VAR`: Use another variable to retrieve the remote IP address for access [log_format](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format) on Nginx. (default `remote_addr`)
 
+#### Flarum
+
 * `FLARUM_DEBUG`: Enables or disables debug mode, used to troubleshoot issues (default `false`)
 * `FLARUM_BASE_URL`: The URL to your Flarum installation **required**
 * `FLARUM_FORUM_TITLE`: Flarum forum title, only used during first installation (default `Flarum Dockerized`)
 * `FLARUM_API_PATH`: Flarum api path (default `api`)
 * `FLARUM_ADMIN_PATH`: Flarum admin path (default `admin`)
+
+#### Database
 
 * `DB_HOST`: MySQL database hostname / IP address **required**
 * `DB_PORT`: MySQL database port (default `3306`)
