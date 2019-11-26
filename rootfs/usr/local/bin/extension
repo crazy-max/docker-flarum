@@ -1,4 +1,5 @@
 #!/bin/sh
+# Credits: https://github.com/mondediefr/docker-flarum
 set -e
 
 EXTS_CACHE_DIR=/data/extensions/.cache
