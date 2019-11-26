@@ -1,0 +1,43 @@
+#!/bin/sh
+set -e
+
+EXTS_CACHE_DIR=/data/extensions/.cache
+EXTS_LIST=/data/extensions/list
+
+cd /opt/flarum/ || exit
+action=${1}
+package=${2}
+
+case "${action}" in
+  "require")
+    COMPOSER_CACHE_DIR=${EXTS_CACHE_DIR} su-exec flarum:flarum composer require "${package}"
+    if [ $? -eq 0 ]; then
+      echo "${package}" >> "${EXTS_LIST}"
+      echo "${package} extension added"
+      sort -u -o "${EXTS_LIST}" "${EXTS_LIST}"
+    else
+      echo "ERROR: cannot add ${package} extension"
+    fi
+    ;;
+  "remove")
+    COMPOSER_CACHE_DIR=${EXTS_CACHE_DIR} su-exec flarum:flarum composer remove "${package}"
+    if [ $? -eq 0 ]; then
+      sed -i "\|${package}|d" "${EXTS_LIST}"
+      echo "${package} extension removed"
+    else
+      echo "ERROR: cannot remove ${package} extension"
+    fi
+    ;;
+  "list")
+    cat "${EXTS_LIST}"
+    ;;
+  *)
+    echo "Usage:"
+    echo "extension require <package>"
+    echo "extension remove <package>"
+    echo "extension list"
+    exit 1
+    ;;
+esac
+
+su-exec flarum:flarum php flarum cache:clear

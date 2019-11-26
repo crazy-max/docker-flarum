@@ -1,0 +1,56 @@
+version: "3.5"
+
+services:
+  traefik:
+    image: traefik:1.7-alpine
+    container_name: traefik
+    command:
+      - "--logLevel=INFO"
+      - "--defaultentrypoints=http,https"
+      - "--entryPoints=Name:http Address::80"
+      - "--docker"
+      - "--docker.exposedbydefault=false"
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    restart: always
+
+  db:
+    image: mariadb:10.4
+    container_name: flarum_db
+    volumes:
+      - "./db:/var/lib/mysql"
+    environment:
+      - "TZ=${TZ}"
+      - "MYSQL_ALLOW_EMPTY_PASSWORD=yes"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
+      - "MYSQL_USER=${MYSQL_USER}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+    restart: always
+
+  flarum:
+    image: crazymax/flarum:latest
+    container_name: flarum
+    depends_on:
+      - db
+    volumes:
+      - "./data:/data"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=flarum"
+      - "traefik.port=8000"
+      - "traefik.frontend.rule=Host:127.0.0.1;PathPrefixStrip:/flarum"
+    environment:
+      - "TZ=${TZ}"
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "DB_HOST=db"
+      - "DB_NAME=${MYSQL_DATABASE}"
+      - "DB_USER=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+    env_file:
+      - "./flarum.env"
+    restart: always

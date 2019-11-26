@@ -1,0 +1,38 @@
+version: "3.5"
+
+services:
+  db:
+    image: mariadb:10.4
+    container_name: flarum_db
+    volumes:
+      - "./db:/var/lib/mysql"
+    environment:
+      - "TZ=${TZ}"
+      - "MYSQL_ALLOW_EMPTY_PASSWORD=yes"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
+      - "MYSQL_USER=${MYSQL_USER}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+    restart: always
+
+  flarum:
+    image: crazymax/flarum:latest
+    container_name: flarum
+    ports:
+      - target: 8000
+        published: 8000
+        protocol: tcp
+    depends_on:
+      - db
+    volumes:
+      - "./data:/data"
+    environment:
+      - "TZ=${TZ}"
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "DB_HOST=db"
+      - "DB_NAME=${MYSQL_DATABASE}"
+      - "DB_USER=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+    env_file:
+      - "./flarum.env"
+    restart: always
