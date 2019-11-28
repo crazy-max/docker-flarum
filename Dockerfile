@@ -68,7 +68,7 @@ RUN apk --update --no-cache add \
   && s6-echo "s6-overlay installed" \
   && rm -rf /tmp/* /var/cache/apk/* /var/www/*
 
-ENV FLARUM_VERSION="v0.1.0-beta.10" \
+ENV FLARUM_VERSION="v0.1.0-beta.11" \
   TZ="UTC" \
   PUID="1000" \
   PGID="1000" \
