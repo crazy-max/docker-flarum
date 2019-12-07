@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.11-RC2 (2019/12/07)
+
+* Fix timezone
+
 ## 0.1.0-beta.11-RC1 (2019/11/28)
 
 * Flarum 0.1.0-beta.11

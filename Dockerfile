@@ -68,11 +68,11 @@ RUN apk --update --no-cache add \
   && s6-echo "s6-overlay installed" \
   && rm -rf /tmp/* /var/cache/apk/* /var/www/*
 
-ENV FLARUM_VERSION="v0.1.0-beta.11" \
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
+  FLARUM_VERSION="v0.1.0-beta.11" \
   TZ="UTC" \
   PUID="1000" \
-  PGID="1000" \
-  S6_BEHAVIOUR_IF_STAGE2_FAILS="2"
+  PGID="1000"
 
 RUN mkdir -p /opt/flarum \
   && curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
