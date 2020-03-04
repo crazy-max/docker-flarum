@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-beta.12-RC1 (2020/03/04)
+
+* Flarum 0.1.0-beta.12
+* Alpine Linux 3.11
+
 ## 0.1.0-beta.11-RC3 (2020/01/24)
 
 * Move Nginx temp folders to `/tmp`

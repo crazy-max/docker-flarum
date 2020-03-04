@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.10
+FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.11
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -69,7 +69,7 @@ RUN apk --update --no-cache add \
   && rm -rf /tmp/* /var/cache/apk/* /var/www/*
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
-  FLARUM_VERSION="v0.1.0-beta.11" \
+  FLARUM_VERSION="v0.1.0-beta.12" \
   TZ="UTC" \
   PUID="1000" \
   PGID="1000"
