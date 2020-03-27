@@ -80,7 +80,6 @@ RUN mkdir -p /opt/flarum \
   && composer clear-cache \
   && addgroup -g ${PGID} flarum \
   && adduser -D -h /opt/flarum -u ${PUID} -G flarum -s /bin/sh -D flarum \
-  && mkdir -p /data /var/run/nginx /var/run/php-fpm \
   && chown -R flarum. /opt/flarum \
   && rm -rf /root/.composer /tmp/*
 

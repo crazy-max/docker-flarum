@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.12-RC2 (2020/03/27)
+
+* Fix folder creation
+
 ## 0.1.0-beta.12-RC1 (2020/03/04)
 
 * Flarum 0.1.0-beta.12
