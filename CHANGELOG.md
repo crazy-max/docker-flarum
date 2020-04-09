@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.12-RC3 (2020/04/09)
+
+* Add php7-exif (#1)
+
 ## 0.1.0-beta.12-RC2 (2020/03/27)
 
 * Fix folder creation
