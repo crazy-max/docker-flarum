@@ -35,6 +35,7 @@ RUN apk --update --no-cache add \
     php7-fileinfo \
     php7-fpm \
     php7-gd \
+    php7-iconv \
     php7-intl \
     php7-json \
     php7-mbstring \
@@ -70,7 +71,7 @@ RUN apk --update --no-cache add \
   && rm -rf /tmp/* /var/cache/apk/* /var/www/*
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
-  FLARUM_VERSION="v0.1.0-beta.12" \
+  FLARUM_VERSION="v0.1.0-beta.13" \
   TZ="UTC" \
   PUID="1000" \
   PGID="1000"

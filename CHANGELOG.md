@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.13-RC1 (2020/05/06)
+
+* Flarum 0.1.0-beta.13
+
 ## 0.1.0-beta.12-RC3 (2020/04/09)
 
 * Add php7-exif (#1)
