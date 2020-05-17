@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.13-RC2 (2020/05/17)
+
+* Add `LISTEN_IPV6` env var
+
 ## 0.1.0-beta.13-RC1 (2020/05/06)
 
 * Flarum 0.1.0-beta.13

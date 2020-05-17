@@ -17,6 +17,28 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 
 💡 Want to be notified of new releases? Check out 🔔 [Diun (Docker Image Update Notifier)](https://github.com/crazy-max/diun) project!
 
+___
+
+* [Features](#features)
+* [Docker](#docker)
+  * [Multi-platform image](#multi-platform-image)
+  * [Environment variables](#environment-variables)
+    * [General](#general)
+    * [Flarum](#flarum)
+    * [Database](#database)
+  * [Volumes](#volumes)
+  * [Ports](#ports)
+* [Usage](#usage)
+  * [Docker Compose](#docker-compose)
+  * [Command line](#command-line)
+* [Upgrade](#upgrade)
+* [Notes](#notes)
+  * [First launch](#first-launch)
+  * [Manage extensions](#manage-extensions)
+  * [Manage extensions](#manage-extensions)
+* [How can I help?](#how-can-i-help)
+* [License](#license)
+
 ## Features
 
 * Run as non-root user
@@ -53,6 +75,7 @@ Image: crazymax/flarum:latest
 * `MEMORY_LIMIT`: PHP memory limit (default `256M`)
 * `UPLOAD_MAX_SIZE`: Upload max size (default `16M`)
 * `OPCACHE_MEM_SIZE`: PHP OpCache memory consumption (default `128`)
+* `LISTEN_IPV6`: Enable IPv6 for Nginx (default `true`)
 * `REAL_IP_FROM`: Trusted addresses that are known to send correct replacement addresses (default `0.0.0.0/32`)
 * `REAL_IP_HEADER`: Request header field whose value will be used to replace the client address (default `X-Forwarded-For`)
 * `LOG_IP_VAR`: Use another variable to retrieve the remote IP address for access [log_format](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format) on Nginx. (default `remote_addr`)
@@ -173,7 +196,7 @@ flagrow/upload extension added
 
 > :warning: You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace) to install extensions for now.
 
-## How can I help ?
+## How can I help?
 
 All kinds of contributions are welcome :raised_hands:! The most basic way to show your support is to star :star2: the project, or to raise issues :speech_balloon: You can also support this project by [**becoming a sponsor on GitHub**](https://github.com/sponsors/crazy-max) :clap: or by making a [Paypal donation](https://www.paypal.me/crazyws) to ensure this journey continues indefinitely! :rocket:
 
