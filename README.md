@@ -35,7 +35,6 @@ ___
 * [Notes](#notes)
   * [First launch](#first-launch)
   * [Manage extensions](#manage-extensions)
-  * [Manage extensions](#manage-extensions)
 * [How can I help?](#how-can-i-help)
 * [License](#license)
 
