@@ -35,6 +35,7 @@ ___
 * [Notes](#notes)
   * [First launch](#first-launch)
   * [Manage extensions](#manage-extensions)
+  * [Sending mails with SMTP](#sending-mails-with-smtp)
 * [How can I help?](#how-can-i-help)
 * [License](#license)
 
