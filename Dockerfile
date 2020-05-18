@@ -62,7 +62,6 @@ RUN apk --update --no-cache add \
     "linux/arm64")   echo "aarch64" ;; \
     "linux/386")     echo "x86"     ;; \
     "linux/ppc64le") echo "ppc64le" ;; \
-    "linux/s390x")   echo "s390x"   ;; \
     *)               echo ""        ;; esac) \
   && echo "S6_ARCH=$S6_ARCH" \
   && wget -q "https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-${S6_ARCH}.tar.gz" -qO "/tmp/s6-overlay-amd64.tar.gz" \
