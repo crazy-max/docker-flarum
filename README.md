@@ -43,6 +43,7 @@ ___
 * Run as non-root user
 * Multi-platform image
 * [s6-overlay](https://github.com/just-containers/s6-overlay/) as process supervisor
+* [msmtpd SMTP relay](https://github.com/crazy-max/docker-msmtpd) image to send emails
 * [Traefik](https://github.com/containous/traefik-library-image) as reverse proxy and creation/renewal of Let's Encrypt certificates (see [this template](examples/traefik))
 
 ## Docker
@@ -194,6 +195,12 @@ flagrow/upload extension added
 ```
 
 > :warning: You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace) to install extensions for now.
+
+### Sending mails with SMTP
+
+You can use our SMTP relay `msmtpd` service published on port `2500` and declared in our [`docker-compose.yml`](examples/compose/docker-compose.yml):
+
+![](.res/smtp-settings.png)
 
 ## How can I help?
 

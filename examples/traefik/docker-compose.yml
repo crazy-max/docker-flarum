@@ -38,11 +38,20 @@ services:
     volumes:
       - "./db:/var/lib/mysql"
     environment:
-      - "TZ=${TZ}"
+      - "TZ"
       - "MYSQL_ALLOW_EMPTY_PASSWORD=yes"
-      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
-      - "MYSQL_USER=${MYSQL_USER}"
-      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+      - "MYSQL_DATABASE"
+      - "MYSQL_USER"
+      - "MYSQL_PASSWORD"
+    restart: always
+
+  msmtpd:
+    image: crazymax/msmtpd:latest
+    container_name: flarum_msmtpd
+    env_file:
+      - "./msmtpd.env"
+    environment:
+      - "TZ"
     restart: always
 
   flarum:
@@ -62,9 +71,9 @@ services:
       - "traefik.port=8000"
       - "traefik.frontend.rule=Host:flarum.example.com"
     environment:
-      - "TZ=${TZ}"
-      - "PUID=${PUID}"
-      - "PGID=${PGID}"
+      - "TZ"
+      - "PUID"
+      - "PGID"
       - "DB_HOST=db"
       - "DB_NAME=${MYSQL_DATABASE}"
       - "DB_USER=${MYSQL_USER}"
