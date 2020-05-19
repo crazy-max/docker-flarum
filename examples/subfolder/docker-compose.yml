@@ -45,6 +45,7 @@ services:
     container_name: flarum
     depends_on:
       - db
+      - msmtpd
     volumes:
       - "./data:/data"
     labels:

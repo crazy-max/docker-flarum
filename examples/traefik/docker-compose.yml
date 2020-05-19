@@ -63,6 +63,7 @@ services:
         protocol: tcp
     depends_on:
       - db
+      - msmtpd
     volumes:
       - "./data:/data"
     labels:
