@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:experimental
 FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.11
 
 ARG BUILD_DATE
@@ -64,8 +63,8 @@ RUN apk --update --no-cache add \
     "linux/ppc64le") echo "ppc64le" ;; \
     *)               echo ""        ;; esac) \
   && echo "S6_ARCH=$S6_ARCH" \
-  && wget -q "https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-${S6_ARCH}.tar.gz" -qO "/tmp/s6-overlay-amd64.tar.gz" \
-  && tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
+  && wget -q "https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-${S6_ARCH}.tar.gz" -qO "/tmp/s6-overlay-${S6_ARCH}.tar.gz" \
+  && tar xzf /tmp/s6-overlay-${S6_ARCH}.tar.gz -C / \
   && s6-echo "s6-overlay installed" \
   && rm -rf /tmp/* /var/cache/apk/* /var/www/*
 

@@ -13,7 +13,7 @@
 ## About
 
 🐳 [Flarum](https://flarum.org/) Docker image based on Alpine Linux.<br />
-If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 🐳 Docker images!
+If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other Docker images!
 
 💡 Want to be notified of new releases? Check out 🔔 [Diun (Docker Image Update Notifier)](https://github.com/crazy-max/diun) project!
 
@@ -98,6 +98,8 @@ Image: crazymax/flarum:latest
 * `DB_PASSWORD`: MySQL password
 * `DB_PREFIX`: MySQL database prefix (default `flarum_`)
 * `DB_TIMEOUT`: Time in seconds after which we stop trying to reach the MySQL server (useful for clusters, default `60`)
+
+> 💡 `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's secrets feature.
 
 ### Volumes
 
