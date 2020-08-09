@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.13-RC3 (2020/08/09)
+
+* Now based on [Alpine Linux 3.12 with s6 overlay](https://github.com/crazy-max/docker-alpine-s6/)
+
 ## 0.1.0-beta.13-RC2 (2020/05/17)
 
 * Add `LISTEN_IPV6` env var
