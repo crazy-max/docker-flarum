@@ -159,7 +159,7 @@ On first launch, an initial administrator user will be created:
 
 ### Manage extensions
 
-You can install [Flarum extensions](https://flagrow.io/extensions) from the command line using a [specially crafted script](rootfs/usr/local/bin/extension) with this image:
+You can install [Flarum extensions](https://extiverse.com/) from the command line using a [specially crafted script](rootfs/usr/local/bin/extension) with this image:
 
 `docker-compose exec flarum extension require <package>`
 
@@ -171,31 +171,35 @@ To list all extensions:
 
 `docker-compose exec flarum extension list`
 
-Example with [`flagrow/upload`](https://flagrow.io/extensions/flagrow/upload) extension:
+Example with [`fof/upload`](https://extiverse.com/extension/fof/upload) extension:
 
 ```
-$ docker-compose exec flarum extension require flagrow/upload
-Using version ^0.7.1 for flagrow/upload
+$ docker-compose exec flarum extension require fof/upload
+Using version ^0.10.0 for fof/upload
 ./composer.json has been updated
 Loading composer repositories with package information
 Updating dependencies (including require-dev)
-Package operations: 2 installs, 0 updates, 0 removals
-  - Installing ramsey/uuid (3.8.0): Downloading (100%)
-  - Installing flagrow/upload (0.7.1): Downloading (100%)
-ramsey/uuid suggests installing ircmaxell/random-lib (Provides RandomLib for use with the RandomLibAdapter)
+Package operations: 3 installs, 0 updates, 0 removals
+  - Installing softcreatr/php-mime-detector (3.0.0): Loading from cache
+  - Installing ramsey/uuid (3.9.3): Loading from cache
+  - Installing fof/upload (0.10.0): Loading from cache
 ramsey/uuid suggests installing ext-libsodium (Provides the PECL libsodium extension for use with the SodiumRandomGenerator)
 ramsey/uuid suggests installing ext-uuid (Provides the PECL UUID extension for use with the PeclUuidTimeGenerator and PeclUuidRandomGenerator)
 ramsey/uuid suggests installing moontoast/math (Provides support for converting UUID to 128-bit integer (in string form).)
-ramsey/uuid suggests installing ramsey/uuid-doctrine (Allows the use of Ramsey\Uuid\Uuid as Doctrine field type.)
 ramsey/uuid suggests installing ramsey/uuid-console (A console application for generating UUIDs with ramsey/uuid)
-flagrow/upload suggests installing league/flysystem-aws-s3-v3 (Uploads to AWS S3 using API version 3.)
-flagrow/upload suggests installing techyah/flysystem-ovh (Uploads to OVH Swift vfs using API.)
+ramsey/uuid suggests installing ramsey/uuid-doctrine (Allows the use of Ramsey\Uuid\Uuid as Doctrine field type.)
+ramsey/uuid suggests installing paragonie/random-lib (Provides RandomLib for use with the RandomLibAdapter)
+fof/upload suggests installing league/flysystem-aws-s3-v3 (Uploads to AWS S3 using API version 3.)
+fof/upload suggests installing overtrue/flysystem-qiniu (Uploads to QiNiu using API.)
 Writing lock file
 Generating autoload files
 Carbon 1 is deprecated, see how to migrate to Carbon 2.
 https://carbon.nesbot.com/docs/#api-carbon-2
     You can run './vendor/bin/upgrade-carbon' to get help in updating carbon and other frameworks and libraries that depend on it.
-flagrow/upload extension added
+54 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+fof/upload extension added
+Clearing the cache...
 ```
 
 > :warning: You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace) to install extensions for now.
