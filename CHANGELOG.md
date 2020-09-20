@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.13-RC4 (2020/09/20)
+
+* Add missing PHP extensions
+
 ## 0.1.0-beta.13-RC3 (2020/08/09)
 
 * Now based on [Alpine Linux 3.12 with s6 overlay](https://github.com/crazy-max/docker-alpine-s6/)
