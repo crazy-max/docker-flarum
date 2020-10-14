@@ -2,19 +2,36 @@ version: "3.5"
 
 services:
   traefik:
-    image: traefik:1.7-alpine
+    image: traefik:2.3
     container_name: traefik
     command:
-      - "--logLevel=INFO"
-      - "--defaultentrypoints=http,https"
-      - "--entryPoints=Name:http Address::80"
-      - "--docker"
-      - "--docker.exposedbydefault=false"
+      - "--global.checknewversion=false"
+      - "--global.sendanonymoususage=false"
+      - "--log=true"
+      - "--log.level=INFO"
+      - "--entrypoints.http=true"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.http.http.redirections.entrypoint.to=https"
+      - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.https=true"
+      - "--entrypoints.https.address=:443"
+      - "--certificatesresolvers.letsencrypt"
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.email=webmaster@example.com"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http"
+      - "--providers.docker"
+      - "--providers.docker.watch=true"
+      - "--providers.docker.exposedbydefault=false"
     ports:
       - target: 80
         published: 80
         protocol: tcp
+      - target: 443
+        published: 443
+        protocol: tcp
     volumes:
+      - "./acme.json:/acme.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
     restart: always
 
@@ -50,9 +67,14 @@ services:
       - "./data:/data"
     labels:
       - "traefik.enable=true"
-      - "traefik.backend=flarum"
-      - "traefik.port=8000"
-      - "traefik.frontend.rule=Host:127.0.0.1;PathPrefixStrip:/flarum"
+      - "traefik.http.routers.flarum.entrypoints=https"
+      - "traefik.http.routers.flarum.rule=Host(`flarum.example.com`) && PathPrefix(`/flarum`)"
+      - "traefik.http.routers.flarum.tls=true"
+      - "traefik.http.routers.flarum.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.flarum.tls.domains[0].main=flarum.example.com"
+      - "traefik.http.middlewares.flarum.stripprefix.prefixes=/flarum"
+      - "traefik.http.middlewares.flarum.stripprefix.forceslash=false"
+      - "traefik.http.services.flarum.loadbalancer.server.port=8000"
     environment:
       - "TZ"
       - "PUID"
