@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-beta.14-RC1 (2020/10/27)
+
+* Flarum 0.1.0-beta.14
+* Allow to clear environment in FPM workers
+
 ## 0.1.0-beta.13-RC4 (2020/09/20)
 
 * Add missing PHP extensions
