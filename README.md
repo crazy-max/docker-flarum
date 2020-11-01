@@ -20,7 +20,7 @@ ___
 
 * [Features](#features)
 * [Docker](#docker)
-  * [Multi-platform image](#multi-platform-image)
+  * [Image](#image)
   * [Environment variables](#environment-variables)
     * [General](#general)
     * [Flarum](#flarum)
@@ -48,7 +48,12 @@ ___
 
 ## Docker
 
-### Multi-platform image
+### Image
+
+| Registry                                                                                         | Image                           |
+|--------------------------------------------------------------------------------------------------|---------------------------------|
+| [Docker Hub](https://hub.docker.com/r/crazymax/flarum/)                                            | `crazymax/flarum`                 |
+| [GitHub Container Registry](https://github.com/users/crazy-max/packages/container/package/flarum)  | `ghcr.io/crazy-max/flarum`        |
 
 Following platforms for this image are available:
 
