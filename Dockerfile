@@ -1,9 +1,5 @@
 FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12
 
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
-RUN printf "I am running on ${BUILDPLATFORM:-linux/amd64}, building for ${TARGETPLATFORM:-linux/amd64}\n$(uname -a)\n"
-
 LABEL maintainer="CrazyMax"
 
 RUN apk --update --no-cache add \
@@ -46,7 +42,7 @@ RUN apk --update --no-cache add \
   && rm -rf /tmp/* /var/cache/apk/* /var/www/*
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
-  FLARUM_VERSION="v0.1.0-beta.14" \
+  FLARUM_VERSION="v0.1.0-beta.15" \
   TZ="UTC" \
   PUID="1000" \
   PGID="1000"

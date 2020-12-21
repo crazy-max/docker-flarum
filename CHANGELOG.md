@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.15-RC1 (2020/12/21)
+
+* Flarum 0.1.0-beta.15
+
 ## 0.1.0-beta.14-RC1 (2020/10/27)
 
 * Flarum 0.1.0-beta.14
