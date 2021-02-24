@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-beta.15-r2 (2021/02/24)
+
+* Switch to buildx bake
+* Do not fail on permission issue
+
 ## 0.1.0-beta.15-RC1 (2020/12/21)
 
 * Flarum 0.1.0-beta.15

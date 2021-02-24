@@ -1,5 +1,6 @@
-FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12
+ARG FLARUM_VERSION=v0.1.0-beta.15
 
+FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12-2.1.0.2
 LABEL maintainer="CrazyMax"
 
 RUN apk --update --no-cache add \
@@ -42,11 +43,11 @@ RUN apk --update --no-cache add \
   && rm -rf /tmp/* /var/cache/apk/* /var/www/*
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
-  FLARUM_VERSION="v0.1.0-beta.15" \
   TZ="UTC" \
   PUID="1000" \
   PGID="1000"
 
+ARG FLARUM_VERSION
 RUN mkdir -p /opt/flarum \
   && curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
   && COMPOSER_CACHE_DIR="/tmp" composer create-project flarum/flarum /opt/flarum $FLARUM_VERSION --stability=beta \

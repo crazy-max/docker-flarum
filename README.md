@@ -19,14 +19,14 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 ___
 
 * [Features](#features)
-* [Docker](#docker)
-  * [Image](#image)
-  * [Environment variables](#environment-variables)
-    * [General](#general)
-    * [Flarum](#flarum)
-    * [Database](#database)
-  * [Volumes](#volumes)
-  * [Ports](#ports)
+* [Build locally](#build-locally)
+* [Image](#image)
+* [Environment variables](#environment-variables)
+  * [General](#general)
+  * [Flarum](#flarum)
+  * [Database](#database)
+* [Volumes](#volumes)
+* [Ports](#ports)
 * [Usage](#usage)
   * [Docker Compose](#docker-compose)
   * [Command line](#command-line)
@@ -46,9 +46,20 @@ ___
 * [msmtpd SMTP relay](https://github.com/crazy-max/docker-msmtpd) image to send emails
 * [Traefik](https://github.com/containous/traefik-library-image) as reverse proxy and creation/renewal of Let's Encrypt certificates (see [this template](examples/traefik))
 
-## Docker
+## Build locally
 
-### Image
+```shell
+git clone https://github.com/crazy-max/docker-flarum.git
+cd docker-flarum
+
+# Build image and output to docker (default)
+docker buildx bake
+
+# Build multi-platform image
+docker buildx bake image-all
+```
+
+## Image
 
 | Registry                                                                                         | Image                           |
 |--------------------------------------------------------------------------------------------------|---------------------------------|
@@ -71,9 +82,9 @@ Image: crazymax/flarum:latest
    - linux/s390x
 ```
 
-### Environment variables
+## Environment variables
 
-#### General
+### General
 
 * `TZ`: The timezone assigned to the container (default `UTC`)
 * `PUID`: Flarum user id (default `1000`)
@@ -87,7 +98,7 @@ Image: crazymax/flarum:latest
 * `REAL_IP_HEADER`: Request header field whose value will be used to replace the client address (default `X-Forwarded-For`)
 * `LOG_IP_VAR`: Use another variable to retrieve the remote IP address for access [log_format](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format) on Nginx. (default `remote_addr`)
 
-#### Flarum
+### Flarum
 
 * `FLARUM_DEBUG`: Enables or disables debug mode, used to troubleshoot issues (default `false`)
 * `FLARUM_BASE_URL`: The URL to your Flarum installation **required**
@@ -95,7 +106,7 @@ Image: crazymax/flarum:latest
 * `FLARUM_API_PATH`: Flarum api path (default `api`)
 * `FLARUM_ADMIN_PATH`: Flarum admin path (default `admin`)
 
-#### Database
+### Database
 
 * `DB_HOST`: MySQL database hostname / IP address **required**
 * `DB_PORT`: MySQL database port (default `3306`)
@@ -105,15 +116,17 @@ Image: crazymax/flarum:latest
 * `DB_PREFIX`: MySQL database prefix (default `flarum_`)
 * `DB_TIMEOUT`: Time in seconds after which we stop trying to reach the MySQL server (useful for clusters, default `60`)
 
-> 💡 `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's secrets feature.
+> 💡 `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's
+> secrets feature.
 
-### Volumes
+## Volumes
 
 * `/data`: Contains assets, extensions and storage
 
-> :warning: Note that the volume should be owned by the user/group with the specified `PUID` and `PGID`. If you don't give the volume correct permissions, the container may not start.
+> :warning: Note that the volume should be owned by the user/group with the specified `PUID` and `PGID`. If you
+> don't give the volume correct permissions, the container may not start.
 
-### Ports
+## Ports
 
 * `8000`: HTTP port
 
@@ -121,7 +134,8 @@ Image: crazymax/flarum:latest
 
 ### Docker Compose
 
-Docker compose is the recommended way to run this image. You can use the following [docker compose template](examples/compose/docker-compose.yml), then run the container:
+Docker compose is the recommended way to run this image. You can use the following
+[docker compose template](examples/compose/docker-compose.yml), then run the container:
 
 ```bash
 docker-compose up -d
@@ -145,7 +159,8 @@ docker run -d -p 8000:8000 --name flarum \
 
 ## Upgrade
 
-You can upgrade Flarum automatically through the UI, it works well. But I recommend to recreate the container whenever I push an update:
+You can upgrade Flarum automatically through the UI, it works well. But I recommend to recreate the container
+whenever I push an update:
 
 ```bash
 docker-compose pull
@@ -164,7 +179,8 @@ On first launch, an initial administrator user will be created:
 
 ### Manage extensions
 
-You can install [Flarum extensions](https://extiverse.com/) from the command line using a [specially crafted script](rootfs/usr/local/bin/extension) with this image:
+You can install [Flarum extensions](https://extiverse.com/) from the command line using a
+[specially crafted script](rootfs/usr/local/bin/extension) with this image:
 
 `docker-compose exec flarum extension require <package>`
 
@@ -207,7 +223,8 @@ fof/upload extension added
 Clearing the cache...
 ```
 
-> :warning: You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace) to install extensions for now.
+> :warning: You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace)
+> to install extensions for now.
 
 ### Sending mails with SMTP
 
@@ -217,7 +234,10 @@ You can use our SMTP relay `msmtpd` service published on port `2500` and declare
 
 ## How can I help?
 
-All kinds of contributions are welcome :raised_hands:! The most basic way to show your support is to star :star2: the project, or to raise issues :speech_balloon: You can also support this project by [**becoming a sponsor on GitHub**](https://github.com/sponsors/crazy-max) :clap: or by making a [Paypal donation](https://www.paypal.me/crazyws) to ensure this journey continues indefinitely! :rocket:
+All kinds of contributions are welcome :raised_hands:! The most basic way to show your support is to star :star2:
+the project, or to raise issues :speech_balloon: You can also support this project by
+[**becoming a sponsor on GitHub**](https://github.com/sponsors/crazy-max) :clap: or by making a
+[Paypal donation](https://www.paypal.me/crazyws) to ensure this journey continues indefinitely! :rocket:
 
 Thanks again for your support, it is much appreciated! :pray:
 
