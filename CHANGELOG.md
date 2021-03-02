@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.15-r3 (2021/03/03)
+
+* Switch to `gosu`
+
 ## 0.1.0-beta.15-r2 (2021/02/24)
 
 * Switch to buildx bake

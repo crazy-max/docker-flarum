@@ -136,7 +136,7 @@ echo "Database ready!"
 
 if [ ! -f /data/assets/rev-manifest.json ]; then
   echo "First install detected..."
-su-exec flarum:flarum cat > /tmp/config.yml <<EOL
+gosu flarum:flarum cat > /tmp/config.yml <<EOL
 debug: ${FLARUM_DEBUG}
 baseUrl: ${FLARUM_BASE_URL}
 databaseConfiguration:
@@ -155,7 +155,7 @@ adminUser:
 settings:
   forum_title: ${FLARUM_FORUM_TITLE}
 EOL
-  su-exec flarum:flarum php flarum install --file=/tmp/config.yml
+  gosu flarum:flarum php flarum install --file=/tmp/config.yml
   echo ">>"
   echo ">> WARNING: Flarum has been installed with the default credentials (flarum/flarum)"
   echo ">> Please connect to ${FLARUM_BASE_URL} and change them!"
@@ -163,7 +163,7 @@ EOL
 fi
 
 echo "Creating Flarum config file..."
-su-exec flarum:flarum cat > /opt/flarum/config.php <<EOL
+gosu flarum:flarum cat > /opt/flarum/config.php <<EOL
 <?php return array (
   'debug' => ${FLARUM_DEBUG},
   'database' =>
@@ -196,8 +196,8 @@ if [ -s "/data/extensions/list" ]; then
     extensions="${extensions}${extension} "
   done < /data/extensions/list
   echo "Installing additional extensions..."
-  COMPOSER_CACHE_DIR="/data/extensions/.cache" su-exec flarum:flarum composer require --working-dir /opt/flarum ${extensions}
+  COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum ${extensions}
 fi
 
-su-exec flarum:flarum php flarum migrate
-su-exec flarum:flarum php flarum cache:clear
+gosu flarum:flarum php flarum migrate
+gosu flarum:flarum php flarum cache:clear
