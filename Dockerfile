@@ -1,7 +1,7 @@
 ARG FLARUM_VERSION=v0.1.0-beta.15
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/gosu:latest AS gosu
-FROM --platform=${TARGETPLATFORM:-linux/amd64} crazymax/alpine-s6:3.12-2.1.0.2
+FROM crazymax/gosu:latest AS gosu
+FROM crazymax/alpine-s6:3.12-2.1.0.2
 LABEL maintainer="CrazyMax"
 
 COPY --from=gosu / /
