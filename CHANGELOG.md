@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.15-r4 (2021/03/04)
+
+* Renamed `yasu` (more info https://github.com/crazy-max/yasu#yet-another)
+
 ## 0.1.0-beta.15-r3 (2021/03/03)
 
 * Switch to `gosu`

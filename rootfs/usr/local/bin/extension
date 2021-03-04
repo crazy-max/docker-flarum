@@ -11,7 +11,7 @@ package=${2}
 
 case "${action}" in
   "require")
-    COMPOSER_CACHE_DIR=${EXTS_CACHE_DIR} gosu flarum:flarum composer require "${package}"
+    COMPOSER_CACHE_DIR=${EXTS_CACHE_DIR} yasu flarum:flarum composer require "${package}"
     if [ $? -eq 0 ]; then
       echo "${package}" >> "${EXTS_LIST}"
       echo "${package} extension added"
@@ -21,7 +21,7 @@ case "${action}" in
     fi
     ;;
   "remove")
-    COMPOSER_CACHE_DIR=${EXTS_CACHE_DIR} gosu flarum:flarum composer remove "${package}"
+    COMPOSER_CACHE_DIR=${EXTS_CACHE_DIR} yasu flarum:flarum composer remove "${package}"
     if [ $? -eq 0 ]; then
       sed -i "\|${package}|d" "${EXTS_LIST}"
       echo "${package} extension removed"
@@ -41,4 +41,4 @@ case "${action}" in
     ;;
 esac
 
-gosu flarum:flarum php flarum cache:clear
+yasu flarum:flarum php flarum cache:clear
