@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-beta.16-r0 (2021/03/18)
+
+* Flarum 0.1.0-beta.16
+* Alpine Linux 3.13
+
 ## 0.1.0-beta.15-r4 (2021/03/04)
 
 * Renamed `yasu` (more info https://github.com/crazy-max/yasu#yet-another)
