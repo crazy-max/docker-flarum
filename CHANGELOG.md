@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-beta.16-r1 (2021/03/18)
+
+* Downgrade to Alpine Linux 3.12
+
 ## 0.1.0-beta.16-r0 (2021/03/18)
 
 * Flarum 0.1.0-beta.16
