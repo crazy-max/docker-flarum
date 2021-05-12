@@ -134,7 +134,7 @@ while ! ${dbcmd} -e "show databases;" > /dev/null 2>&1; do
 done
 echo "Database ready!"
 
-if [ ! -f /data/assets/rev-manifest.json ]; then
+if [ ! -f /data/assets/rev-manifest.json ] || [ ! -f /opt/flarum/storage/.flarum-installed.lock ]; then
   echo "First install detected..."
 yasu flarum:flarum cat > /tmp/config.yml <<EOL
 debug: ${FLARUM_DEBUG}
@@ -155,7 +155,8 @@ adminUser:
 settings:
   forum_title: ${FLARUM_FORUM_TITLE}
 EOL
-  yasu flarum:flarum php flarum install --file=/tmp/config.yml
+  yasu flarum:flarum php flarum install --file=/tmp/config.yml &&
+    touch /opt/flarum/storage/.flarum-installed.lock
   echo ">>"
   echo ">> WARNING: Flarum has been installed with the default credentials (flarum/flarum)"
   echo ">> Please connect to ${FLARUM_BASE_URL} and change them!"
