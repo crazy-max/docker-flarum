@@ -156,6 +156,7 @@ settings:
   forum_title: ${FLARUM_FORUM_TITLE}
 EOL
   yasu flarum:flarum php flarum install --file=/tmp/config.yml
+  yasu flarum:flarum touch /data/assets/rev-manifest.json
   echo ">>"
   echo ">> WARNING: Flarum has been installed with the default credentials (flarum/flarum)"
   echo ">> Please connect to ${FLARUM_BASE_URL} and change them!"
