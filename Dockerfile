@@ -1,7 +1,7 @@
-ARG FLARUM_VERSION=v0.1.0-beta.16
+ARG FLARUM_VERSION=v1.0.0
 
 FROM crazymax/yasu:latest AS yasu
-FROM crazymax/alpine-s6:3.12-2.1.0.2
+FROM crazymax/alpine-s6:3.13-2.2.0.3
 LABEL maintainer="CrazyMax"
 
 COPY --from=yasu / /

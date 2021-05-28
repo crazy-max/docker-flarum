@@ -196,28 +196,33 @@ Example with [`fof/upload`](https://extiverse.com/extension/fof/upload) extensio
 
 ```
 $ docker-compose exec flarum extension require fof/upload
-Using version ^0.10.0 for fof/upload
+Using version ^1.0 for fof/upload
 ./composer.json has been updated
+Running composer update fof/upload
 Loading composer repositories with package information
-Updating dependencies (including require-dev)
-Package operations: 3 installs, 0 updates, 0 removals
-  - Installing softcreatr/php-mime-detector (3.0.0): Loading from cache
-  - Installing ramsey/uuid (3.9.3): Loading from cache
-  - Installing fof/upload (0.10.0): Loading from cache
-ramsey/uuid suggests installing ext-libsodium (Provides the PECL libsodium extension for use with the SodiumRandomGenerator)
-ramsey/uuid suggests installing ext-uuid (Provides the PECL UUID extension for use with the PeclUuidTimeGenerator and PeclUuidRandomGenerator)
-ramsey/uuid suggests installing moontoast/math (Provides support for converting UUID to 128-bit integer (in string form).)
-ramsey/uuid suggests installing ramsey/uuid-console (A console application for generating UUIDs with ramsey/uuid)
-ramsey/uuid suggests installing ramsey/uuid-doctrine (Allows the use of Ramsey\Uuid\Uuid as Doctrine field type.)
-ramsey/uuid suggests installing paragonie/random-lib (Provides RandomLib for use with the RandomLibAdapter)
-fof/upload suggests installing league/flysystem-aws-s3-v3 (Uploads to AWS S3 using API version 3.)
-fof/upload suggests installing overtrue/flysystem-qiniu (Uploads to QiNiu using API.)
+Updating dependencies
+Lock file operations: 5 installs, 0 updates, 0 removals
+  - Locking fof/upload (1.0.0)
+  - Locking guzzlehttp/guzzle (7.3.0)
+  - Locking guzzlehttp/promises (1.4.1)
+  - Locking psr/http-client (1.0.1)
+  - Locking softcreatr/php-mime-detector (3.2.0)
 Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 5 installs, 0 updates, 0 removals
+  - Downloading softcreatr/php-mime-detector (3.2.0)
+  - Downloading psr/http-client (1.0.1)
+  - Downloading guzzlehttp/promises (1.4.1)
+  - Downloading guzzlehttp/guzzle (7.3.0)
+  - Downloading fof/upload (1.0.0)
+  - Installing softcreatr/php-mime-detector (3.2.0): Extracting archive
+  - Installing psr/http-client (1.0.1): Extracting archive
+  - Installing guzzlehttp/promises (1.4.1): Extracting archive
+  - Installing guzzlehttp/guzzle (7.3.0): Extracting archive
+  - Installing fof/upload (1.0.0): Extracting archive
+2 package suggestions were added by new dependencies, use `composer suggest` to see details.
 Generating autoload files
-Carbon 1 is deprecated, see how to migrate to Carbon 2.
-https://carbon.nesbot.com/docs/#api-carbon-2
-    You can run './vendor/bin/upgrade-carbon' to get help in updating carbon and other frameworks and libraries that depend on it.
-54 packages you are using are looking for funding.
+70 packages you are using are looking for funding.
 Use the `composer fund` command to find out more!
 fof/upload extension added
 Clearing the cache...

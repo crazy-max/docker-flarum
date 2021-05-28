@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0-r0 (2021/05/28)
+
+* Flarum 1.0.0
+* Alpine Linux 3.13
+* alpine-s6 2.2.0.3
+* Update examples
+
 ## 0.1.0-beta.16-r1 (2021/03/18)
 
 * Downgrade to Alpine Linux 3.12
