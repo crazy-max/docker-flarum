@@ -36,8 +36,12 @@ services:
     restart: always
 
   db:
-    image: mariadb:10.4
+    image: mariadb:10.5
     container_name: flarum_db
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
     volumes:
       - "./db:/var/lib/mysql"
     environment:
