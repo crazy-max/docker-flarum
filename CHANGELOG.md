@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0-r1 (2021/05/28)
+
+* Touch `rev-manifest.json`
+
 ## 1.0.0-r0 (2021/05/28)
 
 * Flarum 1.0.0
