@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0-r2 (2021/08/01)
+
+* Add `FLARUM_POWEREDBY_HEADER` and `FLARUM_REFERRER_POLICY` env vars
+
 ## 1.0.0-r1 (2021/05/28)
 
 * Touch `rev-manifest.json`

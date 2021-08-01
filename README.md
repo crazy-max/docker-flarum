@@ -105,6 +105,8 @@ Image: crazymax/flarum:latest
 * `FLARUM_FORUM_TITLE`: Flarum forum title, only used during first installation (default `Flarum Dockerized`)
 * `FLARUM_API_PATH`: Flarum api path (default `api`)
 * `FLARUM_ADMIN_PATH`: Flarum admin path (default `admin`)
+* `FLARUM_POWEREDBY_HEADER`: Set Flarum's `X-Powered-By` header (default `true`)
+* `FLARUM_REFERRER_POLICY`: Referrer policy (default `same-origin`)
 
 ### Database
 

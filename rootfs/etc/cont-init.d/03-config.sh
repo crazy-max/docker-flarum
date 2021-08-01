@@ -49,6 +49,8 @@ FLARUM_DEBUG=${FLARUM_DEBUG:-false}
 FLARUM_FORUM_TITLE="${FLARUM_FORUM_TITLE:-Flarum Dockerized}"
 FLARUM_API_PATH="${FLARUM_API_PATH:-api}"
 FLARUM_ADMIN_PATH="${FLARUM_ADMIN_PATH:-admin}"
+FLARUM_POWEREDBY_HEADER="${FLARUM_POWEREDBY_HEADER:-true}"
+FLARUM_REFERRER_POLICY="${FLARUM_REFERRER_POLICY:-same-origin}"
 
 #DB_HOST=${DB_HOST:-localhost}
 DB_PORT=${DB_PORT:-3306}
@@ -187,6 +189,11 @@ yasu flarum:flarum cat > /opt/flarum/config.php <<EOL
   array (
     'api' => '${FLARUM_API_PATH}',
     'admin' => '${FLARUM_ADMIN_PATH}',
+  ),
+  'headers' =>
+  array (
+    'poweredByHeader' => ${FLARUM_POWEREDBY_HEADER},
+    'referrerPolicy' => '${FLARUM_REFERRER_POLICY}',
   ),
 );
 EOL
