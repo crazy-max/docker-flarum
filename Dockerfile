@@ -1,7 +1,7 @@
 ARG FLARUM_VERSION=v1.0.0
 
 FROM crazymax/yasu:latest AS yasu
-FROM crazymax/alpine-s6:3.13-2.2.0.3
+FROM crazymax/alpine-s6:3.14-2.2.0.3
 
 COPY --from=yasu / /
 RUN apk --update --no-cache add \
@@ -10,37 +10,38 @@ RUN apk --update --no-cache add \
     libgd \
     mysql-client \
     nginx \
-    php7 \
-    php7-cli \
-    php7-ctype \
-    php7-curl \
-    php7-dom \
-    php7-exif \
-    php7-fileinfo \
-    php7-fpm \
-    php7-gd \
-    php7-gmp \
-    php7-iconv \
-    php7-intl \
-    php7-json \
-    php7-mbstring \
-    php7-opcache \
-    php7-openssl \
-    php7-pdo \
-    php7-pdo_mysql \
-    php7-phar \
-    php7-session \
-    php7-simplexml \
-    php7-sodium \
-    php7-tokenizer \
-    php7-xml \
-    php7-xmlwriter \
-    php7-zip \
-    php7-zlib \
-    php7-pecl-uuid \
+    php8 \
+    php8-cli \
+    php8-ctype \
+    php8-curl \
+    php8-dom \
+    php8-exif \
+    php8-fileinfo \
+    php8-fpm \
+    php8-gd \
+    php8-gmp \
+    php8-iconv \
+    php8-intl \
+    php8-json \
+    php8-mbstring \
+    php8-opcache \
+    php8-openssl \
+    php8-pdo \
+    php8-pdo_mysql \
+    php8-pecl-uuid \
+    php8-phar \
+    php8-session \
+    php8-simplexml \
+    php8-sodium \
+    php8-tokenizer \
+    php8-xml \
+    php8-xmlwriter \
+    php8-zip \
+    php8-zlib \
     shadow \
     tar \
     tzdata \
+  && ln -s /usr/bin/php8 /usr/bin/php \
   && rm -rf /tmp/* /var/cache/apk/* /var/www/*
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
