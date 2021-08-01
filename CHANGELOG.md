@@ -2,6 +2,9 @@
 
 ## 1.0.0-r2 (2021/08/01)
 
+* Alpine Linux 3.14
+* PHP 8
+* Drop linux/386, linux/ppc64le and linux/s390x support
 * Add `FLARUM_POWEREDBY_HEADER` and `FLARUM_REFERRER_POLICY` env vars
 
 ## 1.0.0-r1 (2021/05/28)
