@@ -1,4 +1,4 @@
-ARG FLARUM_VERSION=v1.0.0
+ARG FLARUM_VERSION=v1.0.4
 
 FROM crazymax/yasu:latest AS yasu
 FROM crazymax/alpine-s6:3.14-2.2.0.3
@@ -52,7 +52,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
 ARG FLARUM_VERSION
 RUN mkdir -p /opt/flarum \
   && curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
-  && COMPOSER_CACHE_DIR="/tmp" composer create-project flarum/flarum /opt/flarum $FLARUM_VERSION --stability=beta \
+  && COMPOSER_CACHE_DIR="/tmp" composer create-project flarum/flarum /opt/flarum --no-install \
+  && COMPOSER_CACHE_DIR="/tmp" composer require --working-dir /opt/flarum flarum/core:${FLARUM_VERSION} \
   && composer clear-cache \
   && addgroup -g ${PGID} flarum \
   && adduser -D -h /opt/flarum -u ${PUID} -G flarum -s /bin/sh -D flarum \
