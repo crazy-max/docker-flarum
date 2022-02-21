@@ -1,7 +1,7 @@
 ARG FLARUM_VERSION=v1.1.1
 
 FROM crazymax/yasu:latest AS yasu
-FROM crazymax/alpine-s6:3.14-2.2.0.3
+FROM crazymax/alpine-s6:3.15-2.2.0.3
 
 COPY --from=yasu / /
 RUN apk --update --no-cache add \
@@ -42,7 +42,7 @@ RUN apk --update --no-cache add \
     tar \
     tzdata \
   && ln -s /usr/bin/php8 /usr/bin/php \
-  && rm -rf /tmp/* /var/cache/apk/* /var/www/*
+  && rm -rf /tmp/* /var/www/*
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
   TZ="UTC" \
@@ -61,8 +61,6 @@ RUN mkdir -p /opt/flarum \
   && rm -rf /root/.composer /tmp/*
 
 COPY rootfs /
-
-RUN chmod +x /usr/local/bin/*
 
 EXPOSE 8000
 WORKDIR /opt/flarum
