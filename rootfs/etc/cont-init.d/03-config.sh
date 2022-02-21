@@ -52,6 +52,7 @@ FLARUM_API_PATH="${FLARUM_API_PATH:-api}"
 FLARUM_ADMIN_PATH="${FLARUM_ADMIN_PATH:-admin}"
 FLARUM_POWEREDBY_HEADER="${FLARUM_POWEREDBY_HEADER:-true}"
 FLARUM_REFERRER_POLICY="${FLARUM_REFERRER_POLICY:-same-origin}"
+FLARUM_COOKIE_SAMESITE="${FLARUM_COOKIE_SAMESITE:-lax}"
 
 #DB_HOST=${DB_HOST:-localhost}
 DB_PORT=${DB_PORT:-3306}
@@ -196,6 +197,10 @@ yasu flarum:flarum cat >/opt/flarum/config.php <<EOL
   array (
     'poweredByHeader' => ${FLARUM_POWEREDBY_HEADER},
     'referrerPolicy' => '${FLARUM_REFERRER_POLICY}',
+  ),
+  'cookie' =>
+  array (
+    'samesite' => '${FLARUM_COOKIE_SAMESITE}',
   ),
 );
 EOL
