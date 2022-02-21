@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv bash
+# shellcheck shell=bash
 
 mkdir -p /etc/services.d/nginx
 cat > /etc/services.d/nginx/run <<EOL

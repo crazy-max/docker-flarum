@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv bash
+# shellcheck shell=bash
 
 function fixperms() {
   for folder in $@; do
@@ -28,7 +29,7 @@ file_env() {
   if [ "${!var:-}" ]; then
     val="${!var}"
   elif [ "${!fileVar:-}" ]; then
-    val="$(< "${!fileVar}")"
+    val="$(<"${!fileVar}")"
   fi
   export "$var"="$val"
   unset "$fileVar"
@@ -63,14 +64,14 @@ DB_TIMEOUT=${DB_TIMEOUT:-60}
 # Timezone
 echo "Setting timezone to ${TZ}..."
 ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime
-echo ${TZ} > /etc/timezone
+echo ${TZ} >/etc/timezone
 
 # PHP
 echo "Setting PHP-FPM configuration..."
 sed -e "s/@MEMORY_LIMIT@/$MEMORY_LIMIT/g" \
   -e "s/@UPLOAD_MAX_SIZE@/$UPLOAD_MAX_SIZE/g" \
   -e "s/@CLEAR_ENV@/$CLEAR_ENV/g" \
-  /tpls/etc/php8/php-fpm.d/www.conf > /etc/php8/php-fpm.d/www.conf
+  /tpls/etc/php8/php-fpm.d/www.conf >/etc/php8/php-fpm.d/www.conf
 
 echo "Setting PHP INI configuration..."
 sed -i "s|memory_limit.*|memory_limit = ${MEMORY_LIMIT}|g" /etc/php8/php.ini
@@ -79,7 +80,7 @@ sed -i "s|;date\.timezone.*|date\.timezone = ${TZ}|g" /etc/php8/php.ini
 # OpCache
 echo "Setting OpCache configuration..."
 sed -e "s/@OPCACHE_MEM_SIZE@/$OPCACHE_MEM_SIZE/g" \
-  /tpls/etc/php8/conf.d/opcache.ini > /etc/php8/conf.d/opcache.ini
+  /tpls/etc/php8/conf.d/opcache.ini >/etc/php8/conf.d/opcache.ini
 
 # Nginx
 echo "Setting Nginx configuration..."
@@ -87,7 +88,7 @@ sed -e "s#@UPLOAD_MAX_SIZE@#$UPLOAD_MAX_SIZE#g" \
   -e "s#@REAL_IP_FROM@#$REAL_IP_FROM#g" \
   -e "s#@REAL_IP_HEADER@#$REAL_IP_HEADER#g" \
   -e "s#@LOG_IP_VAR@#$LOG_IP_VAR#g" \
-  /tpls/etc/nginx/nginx.conf > /etc/nginx/nginx.conf
+  /tpls/etc/nginx/nginx.conf >/etc/nginx/nginx.conf
 
 if [ "$LISTEN_IPV6" != "true" ]; then
   sed -e '/listen \[::\]:/d' -i /etc/nginx/nginx.conf
@@ -107,38 +108,39 @@ fixperms /data/assets /data/extensions /data/storage /opt/flarum/vendor
 
 echo "Checking parameters..."
 if [ -z "$FLARUM_BASE_URL" ]; then
-  >&2 echo "ERROR: FLARUM_BASE_URL must be defined"
+  echo >&2 "ERROR: FLARUM_BASE_URL must be defined"
   exit 1
 fi
 
 echo "Checking database connection..."
 if [ -z "$DB_HOST" ]; then
-  >&2 echo "ERROR: DB_HOST must be defined"
+  echo >&2 "ERROR: DB_HOST must be defined"
   exit 1
 fi
 file_env 'DB_USER'
 file_env 'DB_PASSWORD'
 if [ -z "$DB_PASSWORD" ]; then
-  >&2 echo "ERROR: Either DB_PASSWORD or DB_PASSWORD_FILE must be defined"
+  echo >&2 "ERROR: Either DB_PASSWORD or DB_PASSWORD_FILE must be defined"
   exit 1
 fi
 dbcmd="mysql -h ${DB_HOST} -P ${DB_PORT} -u "${DB_USER}" "-p${DB_PASSWORD}""
 
 echo "Waiting ${DB_TIMEOUT}s for database to be ready..."
 counter=1
-while ! ${dbcmd} -e "show databases;" > /dev/null 2>&1; do
+while ! ${dbcmd} -e "show databases;" >/dev/null 2>&1; do
   sleep 1
   counter=$((counter + 1))
   if [ ${counter} -gt ${DB_TIMEOUT} ]; then
-    >&2 echo "ERROR: Failed to connect to database on $DB_HOST"
+    echo >&2 "ERROR: Failed to connect to database on $DB_HOST"
     exit 1
-  fi;
+  fi
 done
 echo "Database ready!"
+counttables=$(echo 'SHOW TABLES' | ${dbcmd} "$DB_NAME" | wc -l)
 
-if [ ! -f /data/assets/rev-manifest.json ]; then
+if [ "${counttables}" -eq "0" ]; then
   echo "First install detected..."
-yasu flarum:flarum cat > /tmp/config.yml <<EOL
+  yasu flarum:flarum cat >/tmp/config.yml <<EOL
 debug: ${FLARUM_DEBUG}
 baseUrl: ${FLARUM_BASE_URL}
 databaseConfiguration:
@@ -166,7 +168,7 @@ EOL
 fi
 
 echo "Creating Flarum config file..."
-yasu flarum:flarum cat > /opt/flarum/config.php <<EOL
+yasu flarum:flarum cat >/opt/flarum/config.php <<EOL
 <?php return array (
   'debug' => ${FLARUM_DEBUG},
   'database' =>
@@ -202,7 +204,7 @@ if [ -s "/data/extensions/list" ]; then
   while read extension; do
     test -z "${extension}" && continue
     extensions="${extensions}${extension} "
-  done < /data/extensions/list
+  done </data/extensions/list
   echo "Installing additional extensions..."
   COMPOSER_CACHE_DIR="/data/extensions/.cache" yasu flarum:flarum composer require --working-dir /opt/flarum ${extensions}
 fi
