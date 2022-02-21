@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0-r0 (2022/02/21)
+
+* Flarum 1.2.0 (#51)
+* Alpine Linux 3.15 (#55)
+* Add `DB_NOPREFIX` env var (#54)
+* Add `FLARUM_COOKIE_SAMESITE` env var (#53)
+* Change first install check detection (#52)
+
 ## 1.1.1-r0 (2021/10/27)
 
 * Flarum 1.1.1 (#46)
