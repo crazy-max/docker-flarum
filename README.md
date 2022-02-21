@@ -114,6 +114,7 @@ Image: crazymax/flarum:latest
 * `DB_USER`: MySQL user (default `flarum`)
 * `DB_PASSWORD`: MySQL password
 * `DB_PREFIX`: MySQL database prefix (default `flarum_`)
+* `DB_NOPREFIX`: Enforce no prefix for the MySQL database (default `false`)
 * `DB_TIMEOUT`: Time in seconds after which we stop trying to reach the MySQL server (useful for clusters, default `60`)
 
 > 💡 `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's
