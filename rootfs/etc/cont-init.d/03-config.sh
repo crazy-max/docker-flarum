@@ -60,6 +60,7 @@ DB_NAME=${DB_NAME:-flarum}
 DB_USER=${DB_USER:-flarum}
 #DB_PASSWORD=${DB_PASSWORD:-asupersecretpassword}
 DB_PREFIX=${DB_PREFIX:-flarum_}
+DB_NOPREFIX=${DB_NOPREFIX:-false}
 DB_TIMEOUT=${DB_TIMEOUT:-60}
 
 # Timezone
@@ -138,6 +139,11 @@ while ! ${dbcmd} -e "show databases;" >/dev/null 2>&1; do
 done
 echo "Database ready!"
 counttables=$(echo 'SHOW TABLES' | ${dbcmd} "$DB_NAME" | wc -l)
+
+# Enforce no prefix for db
+if [ "$DB_NOPREFIX" = "true" ]; then
+  DB_PREFIX=""
+fi
 
 if [ "${counttables}" -eq "0" ]; then
   echo "First install detected..."
