@@ -1,4 +1,4 @@
-ARG FLARUM_VERSION=v1.1.1
+ARG FLARUM_VERSION=v1.2.0
 
 FROM crazymax/yasu:latest AS yasu
 FROM crazymax/alpine-s6:3.15-2.2.0.3
