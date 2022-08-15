@@ -1,7 +1,10 @@
+# syntax=docker/dockerfile:1
+
 ARG FLARUM_VERSION=v1.3.0
+ARG ALPINE_VERSION=3.16
 
 FROM crazymax/yasu:latest AS yasu
-FROM crazymax/alpine-s6:3.15-2.2.0.3
+FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
 
 COPY --from=yasu / /
 RUN apk --update --no-cache add \
@@ -41,7 +44,6 @@ RUN apk --update --no-cache add \
     shadow \
     tar \
     tzdata \
-  && ln -s /usr/bin/php8 /usr/bin/php \
   && rm -rf /tmp/* /var/www/*
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
