@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG FLARUM_VERSION=v1.6.2
-ARG ALPINE_VERSION=3.16
+ARG ALPINE_VERSION=3.17
 
 FROM crazymax/yasu:latest AS yasu
 FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
