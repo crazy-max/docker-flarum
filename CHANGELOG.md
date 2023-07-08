@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.0-r1 (2023/07/08)
+
+* Fix nginx.conf for sitemap extension (#84)
+
 ## 1.8.0-r0 (2023/06/18)
 
 * Flarum 1.8.0 (#81)
