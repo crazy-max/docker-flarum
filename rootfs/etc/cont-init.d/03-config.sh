@@ -79,6 +79,15 @@ echo "Setting PHP INI configuration..."
 sed -i "s|memory_limit.*|memory_limit = ${MEMORY_LIMIT}|g" /etc/php81/php.ini
 sed -i "s|;date\.timezone.*|date\.timezone = ${TZ}|g" /etc/php81/php.ini
 
+# Install additional php extensions
+if [ -n "${PHP_EXTENSIONS}" ]; then
+  for php_extension in ${PHP_EXTENSIONS}; do
+    PACKAGES="php81-${php_extension} ${PACKAGES}"
+  done
+  echo "[INFO] Adding php extensions"
+  apk add --no-progress --no-cache ${PACKAGES}
+fi
+
 # OpCache
 echo "Setting OpCache configuration..."
 sed -e "s/@OPCACHE_MEM_SIZE@/$OPCACHE_MEM_SIZE/g" \
