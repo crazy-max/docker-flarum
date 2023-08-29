@@ -1,0 +1,42 @@
+name: flarum
+
+services:
+  db:
+    image: mariadb:10.5
+    container_name: flarum_db
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    volumes:
+      - "./db:/var/lib/mysql"
+    environment:
+      - "TZ"
+      - "MYSQL_ALLOW_EMPTY_PASSWORD=yes"
+      - "MYSQL_DATABASE"
+      - "MYSQL_USER"
+      - "MYSQL_PASSWORD"
+    restart: always
+
+  flarum:
+    image: ${FLARUM_IMAGE:-crazymax/flarum}
+    container_name: ${FLARUM_CONTAINER:-flarum}
+    ports:
+      - target: 8000
+        published: 8000
+        protocol: tcp
+    depends_on:
+      - db
+    volumes:
+      - "./data:/data"
+    environment:
+      - "TZ"
+      - "PUID"
+      - "PGID"
+      - "DB_HOST=db"
+      - "DB_NAME=${MYSQL_DATABASE}"
+      - "DB_USER=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+    env_file:
+      - "./flarum.env"
+    restart: always
