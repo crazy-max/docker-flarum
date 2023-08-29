@@ -1,4 +1,4 @@
-version: "3.5"
+name: flarum
 
 services:
   traefik:
@@ -64,10 +64,6 @@ services:
   flarum:
     image: crazymax/flarum:latest
     container_name: flarum
-    ports:
-      - target: 8000
-        published: 8000
-        protocol: tcp
     depends_on:
       - db
       - msmtpd
@@ -76,10 +72,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.flarum.entrypoints=https"
-      - "traefik.http.routers.flarum.rule=Host(`flarum.example.com`)"
+      - "traefik.http.routers.flarum.rule=Host(`flarum.example.com`) && PathPrefix(`/flarum`)"
       - "traefik.http.routers.flarum.tls=true"
       - "traefik.http.routers.flarum.tls.certresolver=letsencrypt"
       - "traefik.http.routers.flarum.tls.domains[0].main=flarum.example.com"
+      - "traefik.http.middlewares.flarum.stripprefix.prefixes=/flarum"
+      - "traefik.http.middlewares.flarum.stripprefix.forceslash=false"
       - "traefik.http.services.flarum.loadbalancer.server.port=8000"
     environment:
       - "TZ"
