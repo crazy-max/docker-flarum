@@ -64,10 +64,10 @@ docker buildx bake image-all
 
 ## Image
 
-| Registry                                                                                         | Image                           |
-|--------------------------------------------------------------------------------------------------|---------------------------------|
-| [Docker Hub](https://hub.docker.com/r/crazymax/flarum/)                                            | `crazymax/flarum`                 |
-| [GitHub Container Registry](https://github.com/users/crazy-max/packages/container/package/flarum)  | `ghcr.io/crazy-max/flarum`        |
+| Registry                                                                                          | Image                      |
+|---------------------------------------------------------------------------------------------------|----------------------------|
+| [Docker Hub](https://hub.docker.com/r/crazymax/flarum/)                                           | `crazymax/flarum`          |
+| [GitHub Container Registry](https://github.com/users/crazy-max/packages/container/package/flarum) | `ghcr.io/crazy-max/flarum` |
 
 Following platforms for this image are available:
 
@@ -120,15 +120,20 @@ Image: crazymax/flarum:latest
 * `DB_NOPREFIX`: Enforce no prefix for the MySQL database (default `false`)
 * `DB_TIMEOUT`: Time in seconds after which we stop trying to reach the MySQL server (useful for clusters, default `60`)
 
-> 💡 `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a file, especially for Docker's
-> secrets feature.
+> **Note**
+>
+> `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a
+> file, especially for Docker's secrets feature.
 
 ## Volumes
 
 * `/data`: Contains assets, extensions and storage
 
-> :warning: Note that the volume should be owned by the user/group with the specified `PUID` and `PGID`. If you
-> don't give the volume correct permissions, the container may not start.
+> **Warning**
+>
+> Note that the volume should be owned by the user/group with the specified
+> `PUID` and `PGID`. If you don't give the volume correct permissions, the
+> container may not start.
 
 ## Ports
 
@@ -139,11 +144,11 @@ Image: crazymax/flarum:latest
 ### Docker Compose
 
 Docker compose is the recommended way to run this image. You can use the following
-[docker compose template](examples/compose/docker-compose.yml), then run the container:
+[docker compose template](examples/compose/compose.yml), then run the container:
 
 ```bash
-docker-compose up -d
-docker-compose logs -f
+docker compose up -d
+docker compose logs -f
 ```
 
 ### Command line
@@ -158,17 +163,18 @@ docker run -d -p 8000:8000 --name flarum \
   crazymax/flarum:latest
 ```
 
-> `-e "DB_HOST=db"`<br />
-> :warning: `db` must be a running MySQL instance
+> **Warning**
+>
+> `db` must be a running MySQL instance
 
 ## Upgrade
 
-You can upgrade Flarum automatically through the UI, it works well. But I recommend to recreate the container
-whenever I push an update:
+You can upgrade Flarum automatically through the UI, it works well. But I
+recommend to recreate the container whenever I push an update:
 
 ```bash
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 ## Notes
@@ -186,20 +192,20 @@ On first launch, an initial administrator user will be created:
 You can install [Flarum extensions](https://extiverse.com/) from the command line using a
 [specially crafted script](rootfs/usr/local/bin/extension) with this image:
 
-`docker-compose exec flarum extension require <package>`
+`docker compose exec flarum extension require <package>`
 
 To remove an extension:
 
-`docker-compose exec flarum extension remove <package>`
+`docker compose exec flarum extension remove <package>`
 
 To list all extensions:
 
-`docker-compose exec flarum extension list`
+`docker compose exec flarum extension list`
 
 Example with [`fof/upload`](https://extiverse.com/extension/fof/upload) extension:
 
 ```
-$ docker-compose exec flarum extension require fof/upload
+$ docker compose exec flarum extension require fof/upload
 Using version ^1.0 for fof/upload
 ./composer.json has been updated
 Running composer update fof/upload
@@ -232,12 +238,15 @@ fof/upload extension added
 Clearing the cache...
 ```
 
-> :warning: You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace)
+> **Warning**
+>
+> You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace)
 > to install extensions for now.
 
 ### Sending mails with SMTP
 
-You can use our SMTP relay `msmtpd` service published on port `2500` and declared in our [`docker-compose.yml`](examples/compose/docker-compose.yml):
+You can use our SMTP relay `msmtpd` service published on port `2500` and
+declared in our [`compose.yml`](examples/compose/compose.yml):
 
 ![](.github/smtp-settings.png)
 

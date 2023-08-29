@@ -1,4 +1,4 @@
-version: "3.5"
+name: flarum
 
 services:
   db:
@@ -18,25 +18,15 @@ services:
       - "MYSQL_PASSWORD"
     restart: always
 
-  msmtpd:
-    image: crazymax/msmtpd:latest
-    container_name: flarum_msmtpd
-    env_file:
-      - "./msmtpd.env"
-    environment:
-      - "TZ"
-    restart: always
-
   flarum:
-    image: crazymax/flarum:latest
-    container_name: flarum
+    image: ${FLARUM_IMAGE:-crazymax/flarum}
+    container_name: ${FLARUM_CONTAINER:-flarum}
     ports:
       - target: 8000
         published: 8000
         protocol: tcp
     depends_on:
       - db
-      - msmtpd
     volumes:
       - "./data:/data"
     environment:
