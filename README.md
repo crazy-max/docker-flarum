@@ -177,6 +177,14 @@ docker compose pull
 docker compose up -d
 ```
 
+## Deploy on Sealos
+
+> Installs Flarum on Sealos using all free addons. Takes about 1 minutes to install. Gracefully handle high concurrency and offer dynamic scalability.
+
+Click button to deploy👇
+
+[![](https://raw.githubusercontent.com/labring-actions/templates/main/Deploy-on-Sealos.svg)](https://cloud.sealos.io/?openapp=system-fastdeploy%3FtemplateName%3Dflarum)
+
 ## Notes
 
 ### First launch
