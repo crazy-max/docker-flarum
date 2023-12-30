@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.2-r0 (2023/12/30)
+
+* Flarum 1.8.3 (#101)
+* Alpine Linux 3.19 and PHP 8.2 (#102)
+
 ## 1.8.0-r1 (2023/07/08)
 
 * Fix nginx.conf for sitemap extension (#84)
