@@ -14,8 +14,7 @@
 Docker image for [Flarum](https://flarum.org/), the next-generation forum
 software that makes online discussion fun.
 
-> **Note**
-> 
+> [!TIP] 
 > Want to be notified of new releases? Check out 🔔 [Diun (Docker Image Update Notifier)](https://github.com/crazy-max/diun)
 > project!
 
@@ -120,8 +119,7 @@ Image: crazymax/flarum:latest
 * `DB_NOPREFIX`: Enforce no prefix for the MySQL database (default `false`)
 * `DB_TIMEOUT`: Time in seconds after which we stop trying to reach the MySQL server (useful for clusters, default `60`)
 
-> **Note**
->
+> [!NOTE]
 > `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a
 > file, especially for Docker's secrets feature.
 
@@ -129,8 +127,7 @@ Image: crazymax/flarum:latest
 
 * `/data`: Contains assets, extensions and storage
 
-> **Warning**
->
+> [!WARNING]
 > Note that the volume should be owned by the user/group with the specified
 > `PUID` and `PGID`. If you don't give the volume correct permissions, the
 > container may not start.
@@ -163,8 +160,7 @@ docker run -d -p 8000:8000 --name flarum \
   crazymax/flarum:latest
 ```
 
-> **Warning**
->
+> [!WARNING]
 > `db` must be a running MySQL instance
 
 ## Upgrade
@@ -190,9 +186,10 @@ On first launch, an initial administrator user will be created:
 ### Manage extensions
 
 You can install [Flarum extensions](https://extiverse.com/) from the command line using a
-[specially crafted script](rootfs/usr/local/bin/extension) with this image:
+[specially crafted script](rootfs/usr/local/bin/extension) with this image. 
+This command now supports installing multiple extensions in one go:
 
-`docker compose exec flarum extension require <package>`
+`docker compose exec flarum extension require <package> [<package2> ...]`
 
 To remove an extension:
 
@@ -238,8 +235,7 @@ fof/upload extension added
 Clearing the cache...
 ```
 
-> **Warning**
->
+> [!WARNING]
 > You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace)
 > to install extensions for now.
 
