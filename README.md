@@ -14,8 +14,7 @@
 Docker image for [Flarum](https://flarum.org/), the next-generation forum
 software that makes online discussion fun.
 
-> **Note**
-> 
+> [!TIP] 
 > Want to be notified of new releases? Check out 🔔 [Diun (Docker Image Update Notifier)](https://github.com/crazy-max/diun)
 > project!
 
@@ -120,8 +119,7 @@ Image: crazymax/flarum:latest
 * `DB_NOPREFIX`: Enforce no prefix for the MySQL database (default `false`)
 * `DB_TIMEOUT`: Time in seconds after which we stop trying to reach the MySQL server (useful for clusters, default `60`)
 
-> **Note**
->
+> [!NOTE]
 > `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a
 > file, especially for Docker's secrets feature.
 
