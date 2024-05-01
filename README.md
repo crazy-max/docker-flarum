@@ -127,8 +127,7 @@ Image: crazymax/flarum:latest
 
 * `/data`: Contains assets, extensions and storage
 
-> **Warning**
->
+> [!WARNING]
 > Note that the volume should be owned by the user/group with the specified
 > `PUID` and `PGID`. If you don't give the volume correct permissions, the
 > container may not start.
@@ -161,8 +160,7 @@ docker run -d -p 8000:8000 --name flarum \
   crazymax/flarum:latest
 ```
 
-> **Warning**
->
+> [!WARNING]
 > `db` must be a running MySQL instance
 
 ## Upgrade
@@ -236,8 +234,7 @@ fof/upload extension added
 Clearing the cache...
 ```
 
-> **Warning**
->
+> [!WARNING]
 > You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace)
 > to install extensions for now.
 
