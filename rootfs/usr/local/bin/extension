@@ -6,7 +6,7 @@ EXTS_LIST=/data/extensions/list
 
 cd /opt/flarum/ || exit
 action=${1}
-shift  
+shift
 
 case "${action}" in
   "require")
@@ -37,8 +37,8 @@ case "${action}" in
     ;;
   *)
     echo "Usage:"
-    echo "extension require <package> [<package2> ...]"
-    echo "extension remove <package> [<package2> ...]"
+    echo "extension require <package> [<package>...]"
+    echo "extension remove <package> [<package>...]"
     echo "extension list"
     exit 1
     ;;
