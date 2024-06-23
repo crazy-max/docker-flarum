@@ -12,6 +12,7 @@ RUN apk --update --no-cache add \
     curl \
     libgd \
     mysql-client \
+    mariadb-connector-c \
     nginx \
     php82 \
     php82-cli \
