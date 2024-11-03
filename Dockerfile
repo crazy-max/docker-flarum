@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG FLARUM_VERSION=v1.8.8
-ARG ALPINE_VERSION=3.19
+ARG ALPINE_VERSION=3.20
 
 FROM crazymax/yasu:latest AS yasu
 FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
@@ -14,34 +14,34 @@ RUN apk --update --no-cache add \
     mysql-client \
     mariadb-connector-c \
     nginx \
-    php82 \
-    php82-cli \
-    php82-ctype \
-    php82-curl \
-    php82-dom \
-    php82-exif \
-    php82-fileinfo \
-    php82-fpm \
-    php82-gd \
-    php82-gmp \
-    php82-iconv \
-    php82-intl \
-    php82-json \
-    php82-mbstring \
-    php82-opcache \
-    php82-openssl \
-    php82-pdo \
-    php82-pdo_mysql \
-    php82-pecl-uuid \
-    php82-phar \
-    php82-session \
-    php82-simplexml \
-    php82-sodium \
-    php82-tokenizer \
-    php82-xml \
-    php82-xmlwriter \
-    php82-zip \
-    php82-zlib \
+    php83 \
+    php83-cli \
+    php83-ctype \
+    php83-curl \
+    php83-dom \
+    php83-exif \
+    php83-fileinfo \
+    php83-fpm \
+    php83-gd \
+    php83-gmp \
+    php83-iconv \
+    php83-intl \
+    php83-json \
+    php83-mbstring \
+    php83-opcache \
+    php83-openssl \
+    php83-pdo \
+    php83-pdo_mysql \
+    php83-pecl-uuid \
+    php83-phar \
+    php83-session \
+    php83-simplexml \
+    php83-sodium \
+    php83-tokenizer \
+    php83-xml \
+    php83-xmlwriter \
+    php83-zip \
+    php83-zlib \
     shadow \
     tar \
     tzdata \
