@@ -5,7 +5,7 @@ function fixperms() {
   for folder in $@; do
     if $(find ${folder} ! -user flarum -o ! -group flarum | egrep '.' -q); then
       echo "Fixing permissions in $folder..."
-      chown -R flarum. "${folder}"
+      chown -R flarum:flarum "${folder}"
     else
       echo "Permissions already fixed in ${folder}"
     fi
@@ -105,7 +105,7 @@ rm -rf /opt/flarum/extensions /opt/flarum/public/assets /opt/flarum/storage
 ln -sf /data/assets /opt/flarum/public/assets
 ln -sf /data/extensions /opt/flarum/extensions
 ln -sf /data/storage /opt/flarum/storage
-chown -h flarum. /opt/flarum/extensions /opt/flarum/public/assets /opt/flarum/storage
+chown -h flarum:flarum /opt/flarum/extensions /opt/flarum/public/assets /opt/flarum/storage
 fixperms /data/assets /data/extensions /data/storage /opt/flarum/vendor
 
 echo "Checking parameters..."
@@ -125,7 +125,7 @@ if [ -z "$DB_PASSWORD" ]; then
   echo >&2 "ERROR: Either DB_PASSWORD or DB_PASSWORD_FILE must be defined"
   exit 1
 fi
-dbcmd="mysql -h ${DB_HOST} -P ${DB_PORT} -u "${DB_USER}" "-p${DB_PASSWORD}""
+dbcmd="mysql --skip-ssl -h ${DB_HOST} -P ${DB_PORT} -u "${DB_USER}" "-p${DB_PASSWORD}""
 
 echo "Waiting ${DB_TIMEOUT}s for database to be ready..."
 counter=1
