@@ -187,11 +187,11 @@ On first launch, an initial administrator user will be created:
 You can install [Flarum extensions](https://extiverse.com/) from the command line using a
 [specially crafted script](rootfs/usr/local/bin/extension) with this image:
 
-`docker compose exec flarum extension require <package>`
+`docker compose exec flarum extension require <package> [<package> ...]`
 
-To remove an extension:
+To remove one or more extensions:
 
-`docker compose exec flarum extension remove <package>`
+`docker compose exec flarum extension remove <package> [<package> ...]`
 
 To list all extensions:
 
