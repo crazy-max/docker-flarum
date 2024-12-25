@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG FLARUM_VERSION=v1.8.9
-ARG ALPINE_VERSION=3.20
+ARG ALPINE_VERSION=3.21
 
 FROM crazymax/yasu:latest AS yasu
 FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
@@ -60,7 +60,7 @@ RUN mkdir -p /opt/flarum \
   && composer clear-cache \
   && addgroup -g ${PGID} flarum \
   && adduser -D -h /opt/flarum -u ${PUID} -G flarum -s /bin/sh -D flarum \
-  && chown -R flarum. /opt/flarum \
+  && chown -R flarum:flarum /opt/flarum \
   && rm -rf /root/.composer /tmp/*
 
 COPY rootfs /

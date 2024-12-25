@@ -117,6 +117,7 @@ linux/arm64
 * `DB_PREFIX`: MySQL database prefix (default `flarum_`)
 * `DB_NOPREFIX`: Enforce no prefix for the MySQL database (default `false`)
 * `DB_TIMEOUT`: Time in seconds after which we stop trying to reach the MySQL server (useful for clusters, default `60`)
+* `DB_SKIP_SSL`: Skip SSL connection to MySQL server (default `true`)
 
 > [!NOTE]
 > `DB_USER_FILE` and `DB_PASSWORD_FILE` can be used to fill in the value from a
