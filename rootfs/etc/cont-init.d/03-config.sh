@@ -62,7 +62,6 @@ DB_USER=${DB_USER:-flarum}
 DB_PREFIX=${DB_PREFIX:-flarum_}
 DB_NOPREFIX=${DB_NOPREFIX:-false}
 DB_TIMEOUT=${DB_TIMEOUT:-60}
-DB_SKIP_SSL=${DB_SKIP_SSL:-true}
 
 # Timezone
 echo "Setting timezone to ${TZ}..."
@@ -127,9 +126,6 @@ if [ -z "$DB_PASSWORD" ]; then
   exit 1
 fi
 dbcmd="mariadb -h ${DB_HOST} -P ${DB_PORT} -u "${DB_USER}" "-p${DB_PASSWORD}""
-if [ "$DB_SKIP_SSL" = "true" ]; then
-  dbcmd="$dbcmd --skip-ssl"
-fi
 
 echo "Waiting ${DB_TIMEOUT}s for database to be ready..."
 counter=1
