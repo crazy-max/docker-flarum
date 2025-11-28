@@ -16,3 +16,11 @@ s6-setuidgid ${PUID}:${PGID}
 php-fpm83 -F
 EOL
 chmod +x /etc/services.d/php-fpm/run
+
+mkdir -p /etc/services.d/cron
+cat > /etc/services.d/cron/run <<EOL
+#!/usr/bin/execlineb -P
+s6-setuidgid 0:0
+crond -f
+EOL
+chmod +x /etc/services.d/cron/run
