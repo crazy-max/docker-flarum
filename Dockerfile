@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG FLARUM_VERSION=v1.8.10
+ARG FLARUM_VERSION=v2.0.0-beta.8
 ARG ALPINE_VERSION=3.22
 
 FROM tianon/gosu:latest AS gosu
@@ -55,8 +55,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
 ARG FLARUM_VERSION
 RUN mkdir -p /opt/flarum \
   && curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
-  && COMPOSER_CACHE_DIR="/tmp" composer create-project flarum/flarum /opt/flarum --no-install \
-  && COMPOSER_CACHE_DIR="/tmp" composer require --working-dir /opt/flarum flarum/core:${FLARUM_VERSION} \
+  && COMPOSER_CACHE_DIR="/tmp" composer create-project flarum/flarum /opt/flarum --stability=beta --no-install \
+  && COMPOSER_CACHE_DIR="/tmp" composer require --working-dir /opt/flarum -W flarum/core:${FLARUM_VERSION} \
   && composer clear-cache \
   && addgroup -g ${PGID} flarum \
   && adduser -D -h /opt/flarum -u ${PUID} -G flarum -s /bin/sh -D flarum \

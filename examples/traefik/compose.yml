@@ -36,10 +36,10 @@ services:
     restart: always
 
   db:
-    image: mariadb:10
+    image: mariadb:11
     container_name: flarum_db
     command:
-      - "mysqld"
+      - "mariadbd"
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
     volumes:
@@ -86,6 +86,7 @@ services:
       - "PUID"
       - "PGID"
       - "DB_HOST=db"
+      - "DB_DRIVER=mariadb"
       - "DB_NAME=${MYSQL_DATABASE}"
       - "DB_USER=${MYSQL_USER}"
       - "DB_PASSWORD=${MYSQL_PASSWORD}"

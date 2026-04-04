@@ -60,6 +60,7 @@ DB_NAME=${DB_NAME:-flarum}
 DB_USER=${DB_USER:-flarum}
 #DB_PASSWORD=${DB_PASSWORD:-asupersecretpassword}
 DB_PREFIX=${DB_PREFIX:-flarum_}
+DB_DRIVER=${DB_DRIVER:-mysql}
 DB_NOPREFIX=${DB_NOPREFIX:-false}
 DB_TIMEOUT=${DB_TIMEOUT:-60}
 
@@ -151,7 +152,7 @@ if [ "${counttables}" -eq "0" ]; then
 debug: ${FLARUM_DEBUG}
 baseUrl: ${FLARUM_BASE_URL}
 databaseConfiguration:
-  driver: mysql
+  driver: ${DB_DRIVER}
   host: ${DB_HOST}
   database: ${DB_NAME}
   username: ${DB_USER}
@@ -180,7 +181,7 @@ gosu flarum:flarum cat >/opt/flarum/config.php <<EOL
   'debug' => ${FLARUM_DEBUG},
   'database' =>
   array (
-    'driver' => 'mysql',
+    'driver' => '${DB_DRIVER}',
     'host' => '${DB_HOST}',
     'port' => ${DB_PORT},
     'database' => '${DB_NAME}',
@@ -217,7 +218,7 @@ if [ -s "/data/extensions/list" ]; then
     extensions="${extensions}${extension} "
   done </data/extensions/list
   echo "Installing additional extensions..."
-  COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum ${extensions}
+  COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum -W ${extensions}
 fi
 
 gosu flarum:flarum php flarum migrate
