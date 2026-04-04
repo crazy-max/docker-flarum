@@ -60,7 +60,6 @@ DB_NAME=${DB_NAME:-flarum}
 DB_USER=${DB_USER:-flarum}
 #DB_PASSWORD=${DB_PASSWORD:-asupersecretpassword}
 DB_PREFIX=${DB_PREFIX:-flarum_}
-DB_DRIVER=${DB_DRIVER:-mysql}
 DB_NOPREFIX=${DB_NOPREFIX:-false}
 DB_TIMEOUT=${DB_TIMEOUT:-60}
 
@@ -139,6 +138,15 @@ while ! ${dbcmd} -e "show databases;" >/dev/null 2>&1; do
   fi
 done
 echo "Database ready!"
+
+# Auto-detect database driver from server version
+DB_DRIVER="mysql"
+SERVER_VERSION=$(${dbcmd} -N -s -e "SELECT VERSION();" 2>/dev/null)
+if echo "$SERVER_VERSION" | grep -qi "mariadb"; then
+  DB_DRIVER="mariadb"
+fi
+echo "Detected database driver: ${DB_DRIVER} (${SERVER_VERSION})"
+
 counttables=$(echo 'SHOW TABLES' | ${dbcmd} "$DB_NAME" | wc -l)
 
 # Enforce no prefix for db

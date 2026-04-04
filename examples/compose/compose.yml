@@ -44,7 +44,6 @@ services:
       - "PUID"
       - "PGID"
       - "DB_HOST=db"
-      - "DB_DRIVER=mariadb"
       - "DB_NAME=${MYSQL_DATABASE}"
       - "DB_USER=${MYSQL_USER}"
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
