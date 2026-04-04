@@ -60,6 +60,7 @@ RUN mkdir -p /opt/flarum \
   && composer clear-cache \
   && addgroup -g ${PGID} flarum \
   && adduser -D -h /opt/flarum -u ${PUID} -G flarum -s /bin/sh -D flarum \
+  && composer show --working-dir /opt/flarum --direct --name-only | sort > /opt/flarum/.bundled-packages \
   && chown -R flarum:flarum /opt/flarum \
   && rm -rf /root/.composer /tmp/*
 
