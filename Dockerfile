@@ -3,10 +3,10 @@
 ARG FLARUM_VERSION=v1.8.10
 ARG ALPINE_VERSION=3.22
 
-FROM crazymax/yasu:latest AS yasu
-FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
+FROM tianon/gosu:latest AS gosu
 
-COPY --from=yasu / /
+FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
+COPY --from=gosu /gosu /usr/local/bin/
 RUN apk --update --no-cache add \
     bash \
     curl \
