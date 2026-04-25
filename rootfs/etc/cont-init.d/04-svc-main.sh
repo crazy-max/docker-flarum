@@ -21,6 +21,6 @@ mkdir -p /etc/services.d/cron
 cat > /etc/services.d/cron/run <<EOL
 #!/usr/bin/execlineb -P
 s6-setuidgid 0:0
-crond -f
+crond -f -L /dev/stdout
 EOL
 chmod +x /etc/services.d/cron/run
