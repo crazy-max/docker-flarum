@@ -138,6 +138,15 @@ while ! ${dbcmd} -e "show databases;" >/dev/null 2>&1; do
   fi
 done
 echo "Database ready!"
+
+# Auto-detect database driver from server version
+DB_DRIVER="mysql"
+SERVER_VERSION=$(${dbcmd} -N -s -e "SELECT VERSION();" 2>/dev/null)
+if echo "$SERVER_VERSION" | grep -qi "mariadb"; then
+  DB_DRIVER="mariadb"
+fi
+echo "Detected database driver: ${DB_DRIVER} (${SERVER_VERSION})"
+
 counttables=$(echo 'SHOW TABLES' | ${dbcmd} "$DB_NAME" | wc -l)
 
 # Enforce no prefix for db
@@ -151,7 +160,7 @@ if [ "${counttables}" -eq "0" ]; then
 debug: ${FLARUM_DEBUG}
 baseUrl: ${FLARUM_BASE_URL}
 databaseConfiguration:
-  driver: mysql
+  driver: ${DB_DRIVER}
   host: ${DB_HOST}
   database: ${DB_NAME}
   username: ${DB_USER}
@@ -180,7 +189,7 @@ gosu flarum:flarum cat >/opt/flarum/config.php <<EOL
   'debug' => ${FLARUM_DEBUG},
   'database' =>
   array (
-    'driver' => 'mysql',
+    'driver' => '${DB_DRIVER}',
     'host' => '${DB_HOST}',
     'port' => ${DB_PORT},
     'database' => '${DB_NAME}',
@@ -217,7 +226,7 @@ if [ -s "/data/extensions/list" ]; then
     extensions="${extensions}${extension} "
   done </data/extensions/list
   echo "Installing additional extensions..."
-  COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum ${extensions}
+  COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum -W ${extensions}
 fi
 
 gosu flarum:flarum php flarum migrate
