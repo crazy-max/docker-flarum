@@ -1,0 +1,12 @@
+#!/bin/sh
+# Sync /data/extensions/list with composer.json so that extensions
+# installed via the admin UI (Extension Manager) persist across restarts.
+
+php -r '
+$bundled = file("/opt/flarum/.bundled-packages", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+$composer = json_decode(file_get_contents("/opt/flarum/composer.json"), true);
+$packages = array_filter(array_keys($composer["require"]), fn($p) => str_contains($p, "/"));
+$extensions = array_diff($packages, $bundled);
+sort($extensions);
+file_put_contents("/data/extensions/list", implode("\n", $extensions) . "\n");
+'

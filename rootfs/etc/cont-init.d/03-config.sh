@@ -220,5 +220,11 @@ if [ -s "/data/extensions/list" ]; then
   COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum ${extensions}
 fi
 
+# Register composer hook so that extensions installed via the admin UI
+# (Extension Manager) are automatically persisted to /data/extensions/list
+# (see https://github.com/crazy-max/docker-flarum/issues/103)
+echo "Registering extension sync hook..."
+gosu flarum:flarum composer config --working-dir /opt/flarum scripts.post-update-cmd extension-sync
+
 gosu flarum:flarum php flarum migrate
 gosu flarum:flarum php flarum cache:clear
