@@ -1,0 +1,3 @@
+# Execute the Flarum Scheduler
+# min   hour    day     month   weekday command
+*       *       *       *       *       cd /opt/flarum && php flarum schedule:run >> /proc/self/fd/1 2>> /proc/self/fd/2
