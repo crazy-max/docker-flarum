@@ -19,7 +19,7 @@ on:
 
 env:
   BUILD_TAG: flarum:test
-  CONTAINER_NAME: anonaddy
+  CONTAINER_NAME: flarum
 
 jobs:
   test:
