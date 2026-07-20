@@ -5,6 +5,6 @@ cd /opt/flarum || exit 1
 
 if [ "$(id -u)" -eq 0 ]; then
   exec gosu flarum:flarum php flarum schedule:run --no-interaction
+else
+  exec php flarum schedule:run --no-interaction
 fi
-
-exec php flarum schedule:run --no-interaction

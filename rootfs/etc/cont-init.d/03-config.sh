@@ -110,6 +110,10 @@ ln -sf /data/storage /opt/flarum/storage
 chown -h flarum:flarum /opt/flarum/extensions /opt/flarum/public/assets /opt/flarum/storage
 fixperms /data/assets /data/extensions /data/storage /opt/flarum/vendor
 
+echo "Configuring extension persistence..."
+gosu flarum:flarum sh /usr/local/bin/extension install-hook
+gosu flarum:flarum sh /usr/local/bin/extension baseline
+
 echo "Checking parameters..."
 if [ -z "$FLARUM_BASE_URL" ]; then
   echo >&2 "ERROR: FLARUM_BASE_URL must be defined"
@@ -234,12 +238,20 @@ if [ "$SIDECAR_CRON" = "1" ]; then
 fi
 
 if [ -s "/data/extensions/list" ]; then
-  while read extension; do
+  extensions=()
+  while IFS= read -r extension; do
+    extension="${extension#"${extension%%[![:space:]]*}"}"
+    extension="${extension%"${extension##*[![:space:]]}"}"
     test -z "${extension}" && continue
-    extensions="${extensions}${extension} "
+    [[ "${extension}" == \#* ]] && continue
+    extensions+=("${extension}")
   done </data/extensions/list
-  echo "Installing additional extensions..."
-  COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum ${extensions}
+
+  if [ "${#extensions[@]}" -gt 0 ]; then
+    echo "Installing additional extensions..."
+    COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum "${extensions[@]}"
+    gosu flarum:flarum sh /usr/local/bin/extension sync
+  fi
 fi
 
 gosu flarum:flarum php flarum migrate

@@ -218,58 +218,49 @@ Run only one cron sidecar per Flarum installation. The default
 
 ### Manage extensions
 
-You can install [Flarum extensions](https://extiverse.com/) from the command line using a
-[specially crafted script](rootfs/usr/local/bin/extension) with this image:
+This image does not persist `/opt/flarum/composer.json`, `composer.lock`, or
+`vendor`. Instead, additional direct Composer requirements are persisted in
+`/data/extensions/list` and reinstalled when the container starts.
 
-`docker compose exec flarum extension require <package> [<package> ...]`
+Extensions installed or removed through Flarum's Extension Manager are
+synchronized to `/data/extensions/list` automatically. You can also manage
+[Flarum extensions](https://docs.flarum.org/extensions/) from the command line
+using the helper script included with this image:
+
+```shell
+docker compose exec flarum extension require <package> [<package> ...]
+```
+
+If no version constraint is provided, the helper requires `<package>:*`, which
+matches Flarum's recommendation for extensions that should track the latest
+version compatible with the installed Flarum core.
 
 To remove one or more extensions:
 
-`docker compose exec flarum extension remove <package> [<package> ...]`
+```shell
+docker compose exec flarum extension remove <package> [<package> ...]
+```
+
+If you run Composer manually with scripts disabled, synchronize the persisted
+extension list afterwards:
+
+```shell
+docker compose exec flarum extension sync
+```
 
 To list all extensions:
 
-`docker compose exec flarum extension list`
+```shell
+docker compose exec flarum extension list
+```
 
 Example with [`fof/upload`](https://extiverse.com/extension/fof/upload) extension:
 
-```
+```shell
 $ docker compose exec flarum extension require fof/upload
-Using version ^1.0 for fof/upload
-./composer.json has been updated
-Running composer update fof/upload
-Loading composer repositories with package information
-Updating dependencies
-Lock file operations: 5 installs, 0 updates, 0 removals
-  - Locking fof/upload (1.0.0)
-  - Locking guzzlehttp/guzzle (7.3.0)
-  - Locking guzzlehttp/promises (1.4.1)
-  - Locking psr/http-client (1.0.1)
-  - Locking softcreatr/php-mime-detector (3.2.0)
-Writing lock file
-Installing dependencies from lock file (including require-dev)
-Package operations: 5 installs, 0 updates, 0 removals
-  - Downloading softcreatr/php-mime-detector (3.2.0)
-  - Downloading psr/http-client (1.0.1)
-  - Downloading guzzlehttp/promises (1.4.1)
-  - Downloading guzzlehttp/guzzle (7.3.0)
-  - Downloading fof/upload (1.0.0)
-  - Installing softcreatr/php-mime-detector (3.2.0): Extracting archive
-  - Installing psr/http-client (1.0.1): Extracting archive
-  - Installing guzzlehttp/promises (1.4.1): Extracting archive
-  - Installing guzzlehttp/guzzle (7.3.0): Extracting archive
-  - Installing fof/upload (1.0.0): Extracting archive
-2 package suggestions were added by new dependencies, use `composer suggest` to see details.
-Generating autoload files
-70 packages you are using are looking for funding.
-Use the `composer fund` command to find out more!
-fof/upload extension added
-Clearing the cache...
+$ docker compose exec flarum extension list
+fof/upload:*
 ```
-
-> [!WARNING]
-> You cannot use [Bazaar marketplace extension](https://discuss.flarum.org/d/5151-bazaar-the-extension-marketplace)
-> to install extensions for now.
 
 ### Sending mails with SMTP
 

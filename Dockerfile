@@ -10,6 +10,7 @@ COPY --from=gosu /gosu /usr/local/bin/
 RUN apk --update --no-cache add \
     bash \
     curl \
+    jq \
     libgd \
     mysql-client \
     mariadb-connector-c \
