@@ -26,6 +26,7 @@ ___
 * [Environment variables](#environment-variables)
   * [General](#general)
   * [Flarum](#flarum)
+  * [Sidecar cron](#sidecar-cron)
   * [Database](#database)
 * [Volumes](#volumes)
 * [Ports](#ports)
@@ -35,6 +36,7 @@ ___
 * [Upgrade](#upgrade)
 * [Notes](#notes)
   * [First launch](#first-launch)
+  * [Scheduler](#scheduler)
   * [Manage extensions](#manage-extensions)
   * [Sending mails with SMTP](#sending-mails-with-smtp)
 * [Contributing](#contributing)
@@ -44,6 +46,7 @@ ___
 
 * Run as non-root user
 * Multi-platform image
+* Cron tasks to run the Flarum scheduler as a "sidecar" container
 * [s6-overlay](https://github.com/just-containers/s6-overlay/) as process supervisor
 * [msmtpd SMTP relay](https://github.com/crazy-max/docker-msmtpd) image to send emails
 * [Traefik](https://github.com/containous/traefik-library-image) as reverse proxy and creation/renewal of Let's Encrypt certificates (see [this template](examples/traefik))
@@ -107,6 +110,14 @@ linux/arm64
 * `FLARUM_REFERRER_POLICY`: Referrer policy (default `same-origin`)
 * `FLARUM_COOKIE_SAMESITE`: Set `SameSite` attribute of `Set-Cookie` (default `lax`)
 * `FLARUM_ANNOUNCEMENTS_DISABLED`: Disable Flarum announcements on the admin dashboard (default `false`)
+
+### Sidecar cron
+
+The following environment variables are only used if you run the container as
+["sidecar" cron mode](#scheduler):
+
+* `SIDECAR_CRON`: Set to `1` to enable sidecar cron mode (default `0`)
+* `CRON_SCHEDULE`: Periodically execute Flarum scheduler (default `* * * * *`)
 
 ### Database
 
@@ -182,6 +193,28 @@ On first launch, an initial administrator user will be created:
 | Login    | Password |
 |----------|----------|
 | `flarum` | `flarum` |
+
+### Scheduler
+
+Flarum scheduled tasks can be run with a "sidecar" container like in the
+[compose file](examples/compose/compose.yml). The sidecar uses the same image,
+database environment, and `/data` volume as the main `flarum` service, but only
+runs cron:
+
+```bash
+docker run -d --name flarum_cron \
+  -v $(pwd)/data:/data \
+  -e "DB_HOST=db" \
+  -e "DB_NAME=flarum" \
+  -e "DB_USER=flarum" \
+  -e "DB_PASSWORD=flarum" \
+  -e "FLARUM_BASE_URL=http://127.0.0.1:8000" \
+  -e "SIDECAR_CRON=1" \
+  crazymax/flarum:latest
+```
+
+Run only one cron sidecar per Flarum installation. The default
+`CRON_SCHEDULE` runs `php flarum schedule:run` every minute.
 
 ### Manage extensions
 

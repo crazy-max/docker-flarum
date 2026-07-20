@@ -92,3 +92,26 @@ services:
     env_file:
       - "./flarum.env"
     restart: always
+
+  cron:
+    image: crazymax/flarum:latest
+    container_name: flarum_cron
+    depends_on:
+      - flarum
+    volumes:
+      - "./data:/data"
+    environment:
+      - "TZ"
+      - "PUID"
+      - "PGID"
+      - "DB_HOST=db"
+      - "DB_NAME=${MYSQL_DATABASE}"
+      - "DB_USER=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+      - "SIDECAR_CRON=1"
+      - "CRON_SCHEDULE=* * * * *"
+    env_file:
+      - "./flarum.env"
+    healthcheck:
+      disable: true
+    restart: always
