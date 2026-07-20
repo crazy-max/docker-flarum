@@ -1,47 +1,186 @@
 #!/usr/bin/env sh
 set -e
 
-EXTS_CACHE_DIR=/data/extensions/.cache
-EXTS_LIST=/data/extensions/list
+HOOK_COMMAND="sh /usr/local/bin/extension sync"
 
-cd /opt/flarum/ || exit
-action=${1}
+BASE_PATH="${FLARUM_EXTENSION_BASE:-/opt/flarum}"
+EXTS_CACHE_DIR="${FLARUM_EXTENSION_CACHE:-/data/extensions/.cache}"
+LIST_PATH="${FLARUM_EXTENSION_LIST:-/data/extensions/list}"
+BASELINE_PATH="${FLARUM_EXTENSION_BASELINE:-${BASE_PATH}/.docker-flarum-base-extensions}"
+COMPOSER_JSON="${BASE_PATH}/composer.json"
+
+usage() {
+  echo "Usage:"
+  echo "extension require <package> [<package>...]"
+  echo "extension remove <package> [<package>...]"
+  echo "extension sync"
+  echo "extension list"
+}
+
+run_as_flarum() {
+  if [ "$(id -u)" -eq 0 ]; then
+    gosu flarum:flarum "$@"
+  else
+    "$@"
+  fi
+}
+
+composer_require() {
+  if [ "$(id -u)" -eq 0 ]; then
+    COMPOSER_CACHE_DIR="${EXTS_CACHE_DIR}" gosu flarum:flarum composer require "$@"
+  else
+    COMPOSER_CACHE_DIR="${EXTS_CACHE_DIR}" composer require "$@"
+  fi
+}
+
+composer_remove() {
+  if [ "$(id -u)" -eq 0 ]; then
+    COMPOSER_CACHE_DIR="${EXTS_CACHE_DIR}" gosu flarum:flarum composer remove "$@"
+  else
+    COMPOSER_CACHE_DIR="${EXTS_CACHE_DIR}" composer remove "$@"
+  fi
+}
+
+sync_as_flarum() {
+  if [ "$(id -u)" -eq 0 ]; then
+    gosu flarum:flarum sh /usr/local/bin/extension sync
+  else
+    sync_list
+  fi
+}
+
+direct_package_names() {
+  jq -r '(.require // {}) | keys[] | select(. != "flarum/core")' "${COMPOSER_JSON}" | sort -u
+}
+
+direct_package_specs() {
+  jq -r '
+    (.require // {}) | to_entries[] | select(.key != "flarum/core") |
+    "\(.key):\(if (.value | type) == "string" and (.value | length) > 0 then .value else "*" end)"
+  ' "${COMPOSER_JSON}" | sort -u
+}
+
+install_hook() {
+  dir=$(dirname "${COMPOSER_JSON}")
+  tmp=$(mktemp -p "${dir}" composer.json.XXXXXX)
+
+  jq --arg cmd "${HOOK_COMMAND}" '
+    .scripts = (.scripts // {}) |
+    (.scripts["post-install-cmd"] // []) as $install |
+    (.scripts["post-update-cmd"] // []) as $update |
+    .scripts["post-install-cmd"] = (
+      (if ($install | type) == "array" then $install
+      elif ($install | type) == "string" then [$install]
+      else [] end) as $commands |
+      if ($commands | index($cmd)) then $commands else $commands + [$cmd] end
+    ) |
+    .scripts["post-update-cmd"] = (
+      (if ($update | type) == "array" then $update
+      elif ($update | type) == "string" then [$update]
+      else [] end) as $commands |
+      if ($commands | index($cmd)) then $commands else $commands + [$cmd] end
+    )
+  ' "${COMPOSER_JSON}" >"${tmp}"
+
+  mv "${tmp}" "${COMPOSER_JSON}"
+}
+
+write_baseline() {
+  direct_package_names >"${BASELINE_PATH}"
+}
+
+sync_list() {
+  if [ ! -f "${BASELINE_PATH}" ]; then
+    echo "Skipping extension sync because ${BASELINE_PATH} is missing" >&2
+    return
+  fi
+
+  mkdir -p "$(dirname "${LIST_PATH}")"
+  tmp_dir=$(dirname "${LIST_PATH}")
+  tmp_name=$(basename "${LIST_PATH}").XXXXXX
+  tmp=$(mktemp -p "${tmp_dir}" "${tmp_name}")
+
+  direct_package_specs | while IFS= read -r spec; do
+    package="${spec%%:*}"
+    if grep -Fxq "${package}" "${BASELINE_PATH}"; then
+      continue
+    fi
+    echo "${spec}"
+  done | sort -u >"${tmp}"
+
+  mv "${tmp}" "${LIST_PATH}"
+}
+
+require_packages() {
+  [ "$#" -gt 0 ] || {
+    usage
+    exit 1
+  }
+
+  cd "${BASE_PATH}" || exit 1
+
+  for package in "$@"; do
+    case "${package}" in
+      *:*) ;;
+      *) package="${package}:*" ;;
+    esac
+
+    composer_require "${package}"
+    sync_as_flarum
+    echo "${package} extension added"
+  done
+
+  run_as_flarum php flarum cache:clear
+}
+
+remove_packages() {
+  [ "$#" -gt 0 ] || {
+    usage
+    exit 1
+  }
+
+  cd "${BASE_PATH}" || exit 1
+
+  for package in "$@"; do
+    package="${package%%:*}"
+    composer_remove "${package}"
+    sync_as_flarum
+    echo "${package} extension removed"
+  done
+
+  run_as_flarum php flarum cache:clear
+}
+
+action=${1:-}
+if [ -z "${action}" ]; then
+  usage
+  exit 1
+fi
 shift
 
 case "${action}" in
   "require")
-    for package in "$@"; do
-      COMPOSER_CACHE_DIR=${EXTS_CACHE_DIR} gosu flarum:flarum composer require "${package}"
-      if [ $? -eq 0 ]; then
-        echo "${package}" >> "${EXTS_LIST}"
-        echo "${package} extension added"
-        sort -u -o "${EXTS_LIST}" "${EXTS_LIST}"
-      else
-        echo "ERROR: cannot add ${package} extension"
-      fi
-    done
+    require_packages "$@"
     ;;
   "remove")
-    for package in "$@"; do
-      COMPOSER_CACHE_DIR=${EXTS_CACHE_DIR} gosu flarum:flarum composer remove "${package}"
-      if [ $? -eq 0 ]; then
-        sed -i "\|${package}|d" "${EXTS_LIST}"
-        echo "${package} extension removed"
-      else
-        echo "ERROR: cannot remove ${package} extension"
-      fi
-    done
+    remove_packages "$@"
+    ;;
+  "sync")
+    sync_as_flarum
     ;;
   "list")
-    cat "${EXTS_LIST}"
+    if [ -f "${LIST_PATH}" ]; then
+      cat "${LIST_PATH}"
+    fi
+    ;;
+  "baseline")
+    write_baseline
+    ;;
+  "install-hook")
+    install_hook
     ;;
   *)
-    echo "Usage:"
-    echo "extension require <package> [<package>...]"
-    echo "extension remove <package> [<package>...]"
-    echo "extension list"
+    usage
     exit 1
     ;;
 esac
-
-gosu flarum:flarum php flarum cache:clear
