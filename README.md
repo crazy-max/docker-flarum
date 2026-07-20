@@ -106,6 +106,7 @@ linux/arm64
 * `FLARUM_POWEREDBY_HEADER`: Set Flarum's `X-Powered-By` header (default `true`)
 * `FLARUM_REFERRER_POLICY`: Referrer policy (default `same-origin`)
 * `FLARUM_COOKIE_SAMESITE`: Set `SameSite` attribute of `Set-Cookie` (default `lax`)
+* `FLARUM_ANNOUNCEMENTS_DISABLED`: Disable Flarum announcements on the admin dashboard (default `false`)
 
 ### Database
 
