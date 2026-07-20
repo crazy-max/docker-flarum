@@ -56,7 +56,7 @@ ARG FLARUM_VERSION
 RUN mkdir -p /opt/flarum \
   && curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
   && COMPOSER_CACHE_DIR="/tmp" composer create-project flarum/flarum /opt/flarum --no-install \
-  && COMPOSER_CACHE_DIR="/tmp" composer require --working-dir /opt/flarum flarum/core:${FLARUM_VERSION} \
+  && COMPOSER_CACHE_DIR="/tmp" COMPOSER_NO_BLOCKING=1 composer require --working-dir /opt/flarum flarum/core:${FLARUM_VERSION} \
   && composer clear-cache \
   && addgroup -g ${PGID} flarum \
   && adduser -D -h /opt/flarum -u ${PUID} -G flarum -s /bin/sh -D flarum \
