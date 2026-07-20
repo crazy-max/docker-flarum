@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG FLARUM_VERSION=v1.8.10
-ARG ALPINE_VERSION=3.22
+ARG ALPINE_VERSION=3.23
 
 FROM tianon/gosu:latest AS gosu
 
@@ -14,34 +14,34 @@ RUN apk --update --no-cache add \
     mysql-client \
     mariadb-connector-c \
     nginx \
-    php83 \
-    php83-cli \
-    php83-ctype \
-    php83-curl \
-    php83-dom \
-    php83-exif \
-    php83-fileinfo \
-    php83-fpm \
-    php83-gd \
-    php83-gmp \
-    php83-iconv \
-    php83-intl \
-    php83-json \
-    php83-mbstring \
-    php83-opcache \
-    php83-openssl \
-    php83-pdo \
-    php83-pdo_mysql \
-    php83-pecl-uuid \
-    php83-phar \
-    php83-session \
-    php83-simplexml \
-    php83-sodium \
-    php83-tokenizer \
-    php83-xml \
-    php83-xmlwriter \
-    php83-zip \
-    php83-zlib \
+    php84 \
+    php84-cli \
+    php84-ctype \
+    php84-curl \
+    php84-dom \
+    php84-exif \
+    php84-fileinfo \
+    php84-fpm \
+    php84-gd \
+    php84-gmp \
+    php84-iconv \
+    php84-intl \
+    php84-json \
+    php84-mbstring \
+    php84-opcache \
+    php84-openssl \
+    php84-pdo \
+    php84-pdo_mysql \
+    php84-pecl-uuid \
+    php84-phar \
+    php84-session \
+    php84-simplexml \
+    php84-sodium \
+    php84-tokenizer \
+    php84-xml \
+    php84-xmlwriter \
+    php84-zip \
+    php84-zlib \
     shadow \
     tar \
     tzdata \
