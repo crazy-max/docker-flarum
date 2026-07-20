@@ -1,6 +1,12 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
+SIDECAR_CRON=${SIDECAR_CRON:-0}
+
+if [ "$SIDECAR_CRON" = "1" ]; then
+  exit 0
+fi
+
 mkdir -p /etc/services.d/nginx
 cat > /etc/services.d/nginx/run <<EOL
 #!/usr/bin/execlineb -P

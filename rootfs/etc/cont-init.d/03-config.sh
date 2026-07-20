@@ -44,6 +44,7 @@ LISTEN_IPV6=${LISTEN_IPV6:-true}
 REAL_IP_FROM=${REAL_IP_FROM:-0.0.0.0/32}
 REAL_IP_HEADER=${REAL_IP_HEADER:-X-Forwarded-For}
 LOG_IP_VAR=${LOG_IP_VAR:-remote_addr}
+SIDECAR_CRON=${SIDECAR_CRON:-0}
 
 FLARUM_DEBUG=${FLARUM_DEBUG:-false}
 #FLARUM_BASE_URL=${FLARUM_BASE_URL:-http://flarum.docker}
@@ -146,6 +147,20 @@ if [ "$DB_NOPREFIX" = "true" ]; then
   DB_PREFIX=""
 fi
 
+if [ "${counttables}" -eq "0" ] && [ "$SIDECAR_CRON" = "1" ]; then
+  echo "Sidecar cron mode detected, waiting ${DB_TIMEOUT}s for Flarum to be installed..."
+  counter=1
+  while [ "${counttables}" -eq "0" ]; do
+    sleep 1
+    counter=$((counter + 1))
+    if [ ${counter} -gt ${DB_TIMEOUT} ]; then
+      echo >&2 "ERROR: Flarum is not installed yet"
+      exit 1
+    fi
+    counttables=$(echo 'SHOW TABLES' | ${dbcmd} "$DB_NAME" | wc -l)
+  done
+fi
+
 if [ "${counttables}" -eq "0" ]; then
   echo "First install detected..."
   gosu flarum:flarum cat >/tmp/config.yml <<EOL
@@ -212,6 +227,11 @@ gosu flarum:flarum cat >/opt/flarum/config.php <<EOL
   'flarum_announcements.disabled' => ${FLARUM_ANNOUNCEMENTS_DISABLED},
 );
 EOL
+
+if [ "$SIDECAR_CRON" = "1" ]; then
+  echo "Sidecar cron mode detected, skipping Flarum maintenance tasks..."
+  exit 0
+fi
 
 if [ -s "/data/extensions/list" ]; then
   while read extension; do
