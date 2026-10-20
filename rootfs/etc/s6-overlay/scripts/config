@@ -1,5 +1,6 @@
-#!/usr/bin/with-contenv bash
-# shellcheck shell=bash
+#!/bin/bash
+
+cd /opt/flarum || exit 1
 
 function fixperms() {
   for folder in $@; do

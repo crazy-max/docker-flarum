@@ -47,7 +47,7 @@ ___
 * Run as non-root user
 * Multi-platform image
 * Cron tasks to run the Flarum scheduler as a "sidecar" container
-* [s6-overlay](https://github.com/just-containers/s6-overlay/) as process supervisor
+* Native [s6-overlay v3](https://github.com/just-containers/s6-overlay/) services
 * [msmtpd SMTP relay](https://github.com/crazy-max/docker-msmtpd) image to send emails
 * [Traefik](https://github.com/containous/traefik-library-image) as reverse proxy and creation/renewal of Let's Encrypt certificates (see [this template](examples/traefik))
 

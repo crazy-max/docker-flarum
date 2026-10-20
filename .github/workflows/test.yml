@@ -58,6 +58,17 @@ jobs:
           log_check: "ready to handle connections"
           timeout: 120
       -
+        name: Check s6 services
+        run: |
+          set -eux
+          timeout 120 sh -c 'until docker compose exec -T cron s6-rc -a list 2>/dev/null | grep -qx cron; do sleep 2; done'
+          docker compose exec -T flarum sh -s web < s6-services.sh
+          docker compose exec -T cron sh -s cron < s6-services.sh
+        working-directory: test
+        env:
+          FLARUM_IMAGE: ${{ env.BUILD_TAG }}
+          FLARUM_CONTAINER: ${{ env.CONTAINER_NAME }}
+      -
         name: Check extension persistence
         run: |
           set -eux
