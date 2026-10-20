@@ -19,6 +19,6 @@ mkdir -p /etc/services.d/php-fpm
 cat > /etc/services.d/php-fpm/run <<EOL
 #!/usr/bin/execlineb -P
 s6-setuidgid ${PUID}:${PGID}
-php-fpm84 -F
+php-fpm85 -F
 EOL
 chmod +x /etc/services.d/php-fpm/run

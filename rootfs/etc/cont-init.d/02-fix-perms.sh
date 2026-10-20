@@ -14,6 +14,6 @@ chown -R flarum:flarum \
   /tpls \
   /var/lib/nginx \
   /var/log/nginx \
-  /var/log/php84 \
+  /var/log/php85 \
   /var/run/nginx \
   /var/run/php-fpm
