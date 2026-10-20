@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG FLARUM_VERSION=v1.8.19
+ARG FLARUM_VERSION=v1.8.20
 ARG ALPINE_VERSION=3.24
 
 FROM tianon/gosu:latest AS gosu
