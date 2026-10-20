@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG FLARUM_VERSION=v1.8.19
-ARG ALPINE_VERSION=3.23
+ARG ALPINE_VERSION=3.24
 
 FROM tianon/gosu:latest AS gosu
 
@@ -15,34 +15,33 @@ RUN apk --update --no-cache add \
     mysql-client \
     mariadb-connector-c \
     nginx \
-    php84 \
-    php84-cli \
-    php84-ctype \
-    php84-curl \
-    php84-dom \
-    php84-exif \
-    php84-fileinfo \
-    php84-fpm \
-    php84-gd \
-    php84-gmp \
-    php84-iconv \
-    php84-intl \
-    php84-json \
-    php84-mbstring \
-    php84-opcache \
-    php84-openssl \
-    php84-pdo \
-    php84-pdo_mysql \
-    php84-pecl-uuid \
-    php84-phar \
-    php84-session \
-    php84-simplexml \
-    php84-sodium \
-    php84-tokenizer \
-    php84-xml \
-    php84-xmlwriter \
-    php84-zip \
-    php84-zlib \
+    php85 \
+    php85-cli \
+    php85-ctype \
+    php85-curl \
+    php85-dom \
+    php85-exif \
+    php85-fileinfo \
+    php85-fpm \
+    php85-gd \
+    php85-gmp \
+    php85-iconv \
+    php85-intl \
+    php85-json \
+    php85-mbstring \
+    php85-openssl \
+    php85-pdo \
+    php85-pdo_mysql \
+    php85-pecl-uuid \
+    php85-phar \
+    php85-session \
+    php85-simplexml \
+    php85-sodium \
+    php85-tokenizer \
+    php85-xml \
+    php85-xmlwriter \
+    php85-zip \
+    php85-zlib \
     shadow \
     tar \
     tzdata \
@@ -56,7 +55,7 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
 ARG FLARUM_VERSION
 RUN mkdir -p /opt/flarum \
   && curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
-  && COMPOSER_CACHE_DIR="/tmp" composer create-project flarum/flarum /opt/flarum --no-install \
+  && COMPOSER_CACHE_DIR="/tmp" composer create-project flarum/flarum /opt/flarum "^1.8" --no-install \
   && COMPOSER_CACHE_DIR="/tmp" COMPOSER_NO_BLOCKING=1 composer require --working-dir /opt/flarum flarum/core:${FLARUM_VERSION} \
   && composer clear-cache \
   && addgroup -g ${PGID} flarum \
