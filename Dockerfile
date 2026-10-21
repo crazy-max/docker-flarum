@@ -5,7 +5,7 @@ ARG ALPINE_VERSION=3.24
 
 FROM tianon/gosu:latest AS gosu
 
-FROM crazymax/alpine-s6:${ALPINE_VERSION}-2.2.0.3
+FROM alpine:${ALPINE_VERSION}
 COPY --from=gosu /gosu /usr/local/bin/
 RUN apk --update --no-cache add \
     bash \
@@ -42,12 +42,14 @@ RUN apk --update --no-cache add \
     php85-xmlwriter \
     php85-zip \
     php85-zlib \
+    s6-overlay \
     shadow \
     tar \
     tzdata \
   && rm -rf /tmp/* /var/www/*
 
-ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"\
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
+  S6_STAGE2_HOOK="/etc/s6-overlay/scripts/runtime-bundles" \
   TZ="UTC" \
   PUID="1000" \
   PGID="1000"
