@@ -1,10 +1,11 @@
 #!/bin/bash
+set -eo pipefail
 
 cd /opt/flarum || exit 1
 
 function fixperms() {
-  for folder in $@; do
-    if $(find ${folder} ! -user flarum -o ! -group flarum | egrep '.' -q); then
+  for folder in "$@"; do
+    if [ -n "$(find "$folder" \( ! -user flarum -o ! -group flarum \) -print -quit)" ]; then
       echo "Fixing permissions in $folder..."
       chown -R flarum:flarum "${folder}"
     else
@@ -104,8 +105,12 @@ fi
 echo "Initializing files and folders..."
 mkdir -p /data/assets /data/extensions/.cache /data/storage
 touch /data/extensions/list
-cp -Rf /opt/flarum/public/assets /data
-cp -Rf /opt/flarum/storage /data
+if [ ! -L /opt/flarum/public/assets ]; then
+  cp -Rf /opt/flarum/public/assets /data
+fi
+if [ ! -L /opt/flarum/storage ]; then
+  cp -Rf /opt/flarum/storage /data
+fi
 rm -rf /opt/flarum/extensions /opt/flarum/public/assets /opt/flarum/storage
 ln -sf /data/assets /opt/flarum/public/assets
 ln -sf /data/extensions /opt/flarum/extensions
@@ -134,11 +139,11 @@ if [ -z "$DB_PASSWORD" ]; then
   echo >&2 "ERROR: Either DB_PASSWORD or DB_PASSWORD_FILE must be defined"
   exit 1
 fi
-dbcmd="mariadb -h ${DB_HOST} -P ${DB_PORT} -u "${DB_USER}" "-p${DB_PASSWORD}""
+dbcmd=(mariadb -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" "-p${DB_PASSWORD}")
 
 echo "Waiting ${DB_TIMEOUT}s for database to be ready..."
 counter=1
-while ! ${dbcmd} -e "show databases;" >/dev/null 2>&1; do
+while ! "${dbcmd[@]}" -e "show databases;" >/dev/null 2>&1; do
   sleep 1
   counter=$((counter + 1))
   if [ ${counter} -gt ${DB_TIMEOUT} ]; then
@@ -147,7 +152,13 @@ while ! ${dbcmd} -e "show databases;" >/dev/null 2>&1; do
   fi
 done
 echo "Database ready!"
-counttables=$(echo 'SHOW TABLES' | ${dbcmd} "$DB_NAME" | wc -l)
+DB_DRIVER=mysql
+dbversion=$("${dbcmd[@]}" -Nse 'SELECT VERSION()')
+if [[ "$dbversion" == *MariaDB* ]]; then
+  DB_DRIVER=mariadb
+fi
+echo "Using ${DB_DRIVER} database driver..."
+counttables=$("${dbcmd[@]}" "$DB_NAME" -Nse 'SHOW TABLES' | wc -l)
 
 # Enforce no prefix for db
 if [ "$DB_NOPREFIX" = "true" ]; then
@@ -164,7 +175,7 @@ if [ "${counttables}" -eq "0" ] && [ "$SIDECAR_CRON" = "1" ]; then
       echo >&2 "ERROR: Flarum is not installed yet"
       exit 1
     fi
-    counttables=$(echo 'SHOW TABLES' | ${dbcmd} "$DB_NAME" | wc -l)
+    counttables=$("${dbcmd[@]}" "$DB_NAME" -Nse 'SHOW TABLES' | wc -l)
   done
 fi
 
@@ -174,7 +185,7 @@ if [ "${counttables}" -eq "0" ]; then
 debug: ${FLARUM_DEBUG}
 baseUrl: ${FLARUM_BASE_URL}
 databaseConfiguration:
-  driver: mysql
+  driver: ${DB_DRIVER}
   host: ${DB_HOST}
   database: ${DB_NAME}
   username: ${DB_USER}
@@ -203,7 +214,7 @@ gosu flarum:flarum cat >/opt/flarum/config.php <<EOL
   'debug' => ${FLARUM_DEBUG},
   'database' =>
   array (
-    'driver' => 'mysql',
+    'driver' => '${DB_DRIVER}',
     'host' => '${DB_HOST}',
     'port' => ${DB_PORT},
     'database' => '${DB_NAME}',
@@ -235,11 +246,6 @@ gosu flarum:flarum cat >/opt/flarum/config.php <<EOL
 );
 EOL
 
-if [ "$SIDECAR_CRON" = "1" ]; then
-  echo "Sidecar cron mode detected, skipping Flarum maintenance tasks..."
-  exit 0
-fi
-
 if [ -s "/data/extensions/list" ]; then
   extensions=()
   while IFS= read -r extension; do
@@ -252,10 +258,17 @@ if [ -s "/data/extensions/list" ]; then
 
   if [ "${#extensions[@]}" -gt 0 ]; then
     echo "Installing additional extensions..."
-    COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum "${extensions[@]}"
-    gosu flarum:flarum sh /usr/local/bin/extension sync
+    COMPOSER_CACHE_DIR="/data/extensions/.cache" gosu flarum:flarum composer require --working-dir /opt/flarum --no-scripts --update-no-dev "${extensions[@]}"
+    if [ "$SIDECAR_CRON" != "1" ]; then
+      gosu flarum:flarum sh /usr/local/bin/extension sync
+    fi
   fi
 fi
 
-gosu flarum:flarum php flarum migrate
-gosu flarum:flarum php flarum cache:clear
+if [ "$SIDECAR_CRON" = "1" ]; then
+  echo "Sidecar cron mode detected, skipping Flarum maintenance tasks..."
+  exit 0
+fi
+
+gosu flarum:flarum php flarum migrate --no-interaction
+gosu flarum:flarum php flarum cache:clear --force

@@ -45,7 +45,7 @@ jobs:
       -
         name: Start
         run: |
-          docker compose up -d
+          docker compose up -d db flarum
         working-directory: test
         env:
           FLARUM_IMAGE: ${{ env.BUILD_TAG }}
@@ -57,6 +57,16 @@ jobs:
           name: ${{ env.CONTAINER_NAME }}
           log_check: "ready to handle connections"
           timeout: 120
+      -
+        name: Check Flarum version and start cron
+        run: |
+          set -eux
+          docker compose exec -T flarum composer show --working-dir /opt/flarum flarum/core | grep -E '^versions[[:space:]]+: \* v?2\.'
+          docker compose up -d cron
+        working-directory: test
+        env:
+          FLARUM_IMAGE: ${{ env.BUILD_TAG }}
+          FLARUM_CONTAINER: ${{ env.CONTAINER_NAME }}
       -
         name: Check s6 services
         run: |
@@ -74,9 +84,18 @@ jobs:
           set -eux
           docker compose exec -T -u flarum flarum sh -lc 'cd /opt/flarum && COMPOSER_CACHE_DIR=/data/extensions/.cache composer require "flarum/extension-manager:*"'
           docker compose exec -T flarum sh -lc 'extension list | grep -Fx "flarum/extension-manager:*"'
+          docker compose restart flarum
+          timeout 180 sh -c 'until docker compose exec -T flarum curl -fsS -o /dev/null http://127.0.0.1:8000; do sleep 5; done'
+          docker compose exec -T flarum sh -lc 'extension list | grep -Fx "flarum/extension-manager:*"'
           docker compose up -d --force-recreate --no-deps flarum
           timeout 180 sh -c 'until docker compose exec -T flarum sh -lc "composer show --working-dir /opt/flarum flarum/extension-manager >/dev/null 2>&1"; do sleep 5; done'
           docker compose exec -T flarum sh -lc 'extension list | grep -Fx "flarum/extension-manager:*"'
+          docker compose exec -T flarum cp /data/extensions/list /data/extensions/before-cron
+          docker compose up -d --force-recreate --no-deps cron
+          timeout 180 sh -c 'until docker compose exec -T cron s6-rc -a list 2>/dev/null | grep -qx cron; do sleep 2; done'
+          docker compose exec -T cron composer show --working-dir /opt/flarum flarum/extension-manager
+          docker compose exec -T cron cmp /data/extensions/list /data/extensions/before-cron
+          docker compose exec -T cron sh -s cron < s6-services.sh
         working-directory: test
         env:
           FLARUM_IMAGE: ${{ env.BUILD_TAG }}

@@ -86,7 +86,9 @@ install_hook() {
 }
 
 write_baseline() {
-  direct_package_names >"${BASELINE_PATH}"
+  if [ ! -f "${BASELINE_PATH}" ]; then
+    direct_package_names >"${BASELINE_PATH}"
+  fi
 }
 
 sync_list() {
