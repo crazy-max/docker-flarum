@@ -2,7 +2,7 @@ name: flarum
 
 services:
   traefik:
-    image: traefik:2.5
+    image: traefik:3.7
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -36,10 +36,10 @@ services:
     restart: always
 
   db:
-    image: mariadb:10
+    image: mariadb:12
     container_name: flarum_db
     command:
-      - "mysqld"
+      - "mariadbd"
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
     volumes:
