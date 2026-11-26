@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1
 
+# renovate: datasource=packagist depName=flarum/core
 ARG FLARUM_VERSION=v2.0.2
+# renovate: datasource=docker depName=alpine versioning=docker
 ARG ALPINE_VERSION=3.24
 
 FROM tianon/gosu:latest AS gosu
