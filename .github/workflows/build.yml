@@ -17,7 +17,7 @@ on:
 
 jobs:
   build:
-    uses: docker/github-builder/.github/workflows/bake.yml@cbc9d42f8c89a55623392aadd03600965b80e963 # v1.18.1
+    uses: docker/github-builder/.github/workflows/bake.yml@bb1eb9fb69408ac52395fb21f49c6b52d564529a # v1.20.0
     permissions:
       contents: read # same as global permissions
       id-token: write # for signing attestation(s) with GitHub OIDC Token
